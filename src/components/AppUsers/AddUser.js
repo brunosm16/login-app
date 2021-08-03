@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import Card from '../UI/Card';
+import Card from '../UI/Card/Card';
+import Button from '../UI/Button/Button';
+
 import styles from './AddUser.module.css';
 
 const AddUser = ({ onAddUser }) => {
@@ -66,7 +68,7 @@ const AddUser = ({ onAddUser }) => {
 	};
 
 	return (
-		<Card className={styles.form}>
+		<Card cssClass={styles.form}>
 			<form onSubmit={handleSubmit}>
 				{/* Login field */}
 				<div
@@ -118,7 +120,14 @@ const AddUser = ({ onAddUser }) => {
 				{/* Buttons */}
 				<div className={styles.actions}>
 					<div className={styles.action}>
-						<button type="submit">sign in</button>
+						<Button
+							isSubmit
+							onClick={handleSubmit}
+							customCss={styles['form-button']}
+						>
+							sign in
+						</Button>
+						{/* <button type="submit">sign in</button> */}
 					</div>
 				</div>
 			</form>
