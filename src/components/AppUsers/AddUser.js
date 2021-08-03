@@ -14,7 +14,7 @@ const AddUser = ({ onAddUser }) => {
 	const [isEmailValid, setIsEmailValid] = useState(true);
 
 	// check if string length is zero
-	const validStrInput = (str) => str.trim.length !== 0;
+	const validStrInput = (str) => str.trim().length !== 0;
 
 	const areInputsValid = () => {
 		const loginValid = validStrInput(enteredLogin);
@@ -29,6 +29,12 @@ const AddUser = ({ onAddUser }) => {
 		return loginValid && passwordValid && emailValid;
 	};
 
+	const resetStates = () => {
+		setEnteredLogin('');
+		setEnteredPassword('');
+		setEnteredEmail('');
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
@@ -40,6 +46,9 @@ const AddUser = ({ onAddUser }) => {
 				password: enteredPassword,
 				email: enteredEmail,
 			});
+
+			// reset form
+			resetStates();
 		}
 	};
 

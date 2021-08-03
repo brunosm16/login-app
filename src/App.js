@@ -3,7 +3,7 @@ import './App.css';
 
 const App = () => {
 	const handleAddUser = (data) => {
-		console.log(`user added : ${data}`);
+		console.log(data);
 	};
 
 	return (

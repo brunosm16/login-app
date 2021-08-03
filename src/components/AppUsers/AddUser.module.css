@@ -55,12 +55,12 @@
 	color: var(--clr-primary-4);
 }
 
-.form-control input.invalid {
-	border-color: var(--clr-primary-5);
+.form-control.invalid input {
+	border-color: var(--clr-red);
 }
 
-.form-control label.invalid {
-	color: var(--clr-primary-5);
+.form-control.invalid label {
+	color: var(--clr-red);
 }
 
 .form .actions {
