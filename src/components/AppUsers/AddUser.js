@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import Card from '../UI/Card';
 import styles from './AddUser.module.css';
 
 const AddUser = ({ onAddUser }) => {
@@ -65,61 +66,63 @@ const AddUser = ({ onAddUser }) => {
 	};
 
 	return (
-		<form className={styles.form} onSubmit={handleSubmit}>
-			{/* Login field */}
-			<div
-				className={`${styles['form-control']} ${
-					!isLoginValid && styles.invalid
-				}`}
-			>
-				<label htmlFor="login">Login</label>
-				<input
-					id="login"
-					type="text"
-					onChange={loginHandler}
-					value={enteredLogin}
-				/>
-			</div>
-
-			{/* Email field */}
-			<div
-				className={`${styles['form-control']} ${
-					!isEmailValid && styles.invalid
-				}`}
-			>
-				<label htmlFor="email">Email</label>
-				<input
-					id="email"
-					type="email"
-					onChange={emailHandler}
-					value={enteredEmail}
-				/>
-			</div>
-
-			{/* Password field */}
-			<div
-				className={`${styles['form-control']} ${
-					!isPasswordValid && styles.invalid
-				}`}
-			>
-				<label htmlFor="password">Password</label>
-				<input
-					id="password"
-					type="password"
-					minLength={5}
-					maxLength={35}
-					onChange={passwordHandler}
-					value={enteredPassword}
-				/>
-			</div>
-
-			{/* Buttons */}
-			<div className={styles.actions}>
-				<div className={styles.action}>
-					<button type="submit">sign in</button>
+		<Card className={styles.form}>
+			<form onSubmit={handleSubmit}>
+				{/* Login field */}
+				<div
+					className={`${styles['form-control']} ${
+						!isLoginValid && styles.invalid
+					}`}
+				>
+					<label htmlFor="login">Login</label>
+					<input
+						id="login"
+						type="text"
+						onChange={loginHandler}
+						value={enteredLogin}
+					/>
 				</div>
-			</div>
-		</form>
+
+				{/* Email field */}
+				<div
+					className={`${styles['form-control']} ${
+						!isEmailValid && styles.invalid
+					}`}
+				>
+					<label htmlFor="email">Email</label>
+					<input
+						id="email"
+						type="email"
+						onChange={emailHandler}
+						value={enteredEmail}
+					/>
+				</div>
+
+				{/* Password field */}
+				<div
+					className={`${styles['form-control']} ${
+						!isPasswordValid && styles.invalid
+					}`}
+				>
+					<label htmlFor="password">Password</label>
+					<input
+						id="password"
+						type="password"
+						minLength={5}
+						maxLength={35}
+						onChange={passwordHandler}
+						value={enteredPassword}
+					/>
+				</div>
+
+				{/* Buttons */}
+				<div className={styles.actions}>
+					<div className={styles.action}>
+						<button type="submit">sign in</button>
+					</div>
+				</div>
+			</form>
+		</Card>
 	);
 };
 

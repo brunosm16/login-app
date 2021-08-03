@@ -5,7 +5,7 @@
 	--clr-primary-3: #797d81;
 	--clr-primary-4: #354341;
 	--clr-primary-5: #9fb3d2;
-	--clr-red: #FC1919;
+	--clr-red: #fc1919;
 
 	/* box shadows */
 	--box-shadow-dark: 0px 5px 8px rgba(0, 0, 0, 0.8);
@@ -22,15 +22,8 @@
 	max-width: 85%;
 	height: 30rem;
 	margin: 2rem auto;
-	border-radius: 15px;
 	background-color: var(--clr-primary-2);
 	color: #888888;
-	box-shadow: var(--box-shadow-dark);
-	transition: var(--transition);
-}
-
-.form:hover {
-	box-shadow: var(--box-shadow-light);
 }
 
 .form-control {
@@ -63,7 +56,7 @@
 	color: var(--clr-red);
 }
 
-.form .actions {
+.actions {
 	width: 100%;
 	display: flex;
 	align-items: flex-end;
@@ -71,7 +64,7 @@
 	margin-top: 1rem;
 }
 
-.form .action {
+.action {
 	display: flex;
 	justify-content: center;
 	align-items: center;
