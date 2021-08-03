@@ -1,9 +1,16 @@
+import AddUser from './components/AppUsers/AddUser';
 import './App.css';
 
 const App = () => {
-	<div className="App">
-		<h1>Login App</h1>
-	</div>;
+	const handleAddUser = (data) => {
+		console.log(`user added : ${data}`);
+	};
+
+	return (
+		<div className="App">
+			<AddUser onAddUser={handleAddUser} />
+		</div>
+	);
 };
 
 export default App;
