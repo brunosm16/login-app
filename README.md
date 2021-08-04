@@ -24,19 +24,19 @@ Projeto que recebe os dados de usuário para realizar um login. Trata-se de um f
   🔒 Login App
   Projeto que recebe os dados de usuário para realizar um login. Trata-se de um formulário feito para colocar em prática os fundamentos de React Js.
 
-💻 Tecnologias Utilizadas
+## 💻 Tecnologias Utilizadas
 JavaScript
 HTML
 CSS & CSS Modules
 React Js
-▶️ Como executar a aplicação
+## ▶️ Como executar a aplicação
 Baixar o projeto ou realizar o clone do projeto na máquina.
 Entrar no diretório login-app.
 Instalar as dependências do projeto com o comando : npm install
 Inicializar o projeto com o comando : npm start
 Abrir o navegador em https:/localhost:3000
 
-⚒️ Recursos que faltam ser implementados na aplicação
+## ⚒️ Recursos que faltam ser implementados na aplicação
 Integração com Banco de Dados.
 Deploy da aplicação.
 Melhorar a validação de dados no formulário
