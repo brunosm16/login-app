@@ -85,7 +85,6 @@ const AddUser = ({ onAddUser }) => {
 	};
 
 	const modalHandler = () => {
-		console.log('here');
 		setModalError(null);
 	};
 
