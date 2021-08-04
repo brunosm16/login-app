@@ -37,6 +37,6 @@ Inicializar o projeto com o comando : npm start
 Abrir o navegador em https:/localhost:3000
 
 ## ⚒️ Recursos que faltam ser implementados na aplicação
-Integração com Banco de Dados.
-Deploy da aplicação.
-Melhorar a validação de dados no formulário
+- Integração com Banco de Dados.
+- Deploy da aplicação.
+- Melhorar a validação de dados no formulário.
