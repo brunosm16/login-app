@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
+import Input from '../UI/Input/Input';
+import Label from '../UI/Label/Label';
+import FormControl from '../UI/Form/FormControl';
 
 import styles from './AddUser.module.css';
 
@@ -10,6 +13,10 @@ const AddUser = ({ onAddUser }) => {
 	const [enteredLogin, setEnteredLogin] = useState('');
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
+
+	// fields lengths lower limit
+	const strMin = 6;
+	const strMax = 256;
 
 	// validation states
 	const [isLoginValid, setIsLoginValid] = useState(true);
@@ -71,51 +78,43 @@ const AddUser = ({ onAddUser }) => {
 		<Card cssClass={styles.form}>
 			<form onSubmit={handleSubmit}>
 				{/* Login field */}
-				<div
-					className={`${styles['form-control']} ${
-						!isLoginValid && styles.invalid
-					}`}
-				>
-					<label htmlFor="login">Login</label>
-					<input
+				<FormControl isInvalid={isLoginValid}>
+					<Label htmlFor="login">Login</Label>
+					<Input
 						id="login"
 						type="text"
 						onChange={loginHandler}
 						value={enteredLogin}
+						minLength={strMin}
+						maxLength={strMax}
 					/>
-				</div>
+				</FormControl>
 
 				{/* Email field */}
-				<div
-					className={`${styles['form-control']} ${
-						!isEmailValid && styles.invalid
-					}`}
-				>
-					<label htmlFor="email">Email</label>
-					<input
+				<FormControl isInvalid={isEmailValid}>
+					<Label htmlFor="email">Email</Label>
+					<Input
 						id="email"
 						type="email"
 						onChange={emailHandler}
 						value={enteredEmail}
+						minLength={strMin}
+						maxLength={strMax}
 					/>
-				</div>
+				</FormControl>
 
 				{/* Password field */}
-				<div
-					className={`${styles['form-control']} ${
-						!isPasswordValid && styles.invalid
-					}`}
-				>
-					<label htmlFor="password">Password</label>
-					<input
+				<FormControl isInvalid={isPasswordValid}>
+					<Label htmlFor="password">Password</Label>
+					<Input
 						id="password"
 						type="password"
-						minLength={5}
-						maxLength={35}
 						onChange={passwordHandler}
 						value={enteredPassword}
+						minLength={strMin}
+						maxLength={strMax}
 					/>
-				</div>
+				</FormControl>
 
 				{/* Buttons */}
 				<div className={styles.actions}>
@@ -127,7 +126,6 @@ const AddUser = ({ onAddUser }) => {
 						>
 							sign in
 						</Button>
-						{/* <button type="submit">sign in</button> */}
 					</div>
 				</div>
 			</form>
