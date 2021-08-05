@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import Card from '../UI/Card/Card';
+import List from '../UI/List/List';
 import UserItem from './UserItem';
 import styles from './UsersList.module.css';
 
 const UsersList = ({ users }) => (
 	<Card cssClass={styles.list__container}>
-		<ul className={styles['users-list']}>
+		<List cssClass={styles['users-list']}>
 			{users.map((user) => (
 				<UserItem login={user.login} email={user.email} />
 			))}
-		</ul>
+		</List>
 	</Card>
 );
 

@@ -6,11 +6,3 @@
 	margin: 1rem;
 	padding: 1rem;
 }
-
-.form-control.invalid input {
-	border-color: #fc1919;
-}
-
-.form-control.invalid label {
-	color: #fc1919;
-}

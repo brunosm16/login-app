@@ -1,8 +1,29 @@
-.input {
+.input-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.input-container label {
+	text-transform: capitalize;
+	color: #fff;
+	font-size: 1rem;
+}
+
+.input-container.invalid label {
+	color: #06beb6;
+}
+
+.input-container input {
 	border-radius: 15px;
 	padding: 0.5rem;
 	outline: none;
-	border: 2px solid #797d81;
-	background: #fbfbfc;
+	border: 2px solid #354341;
+	background: #f2fcfe;
 	color: #354341;
+}
+
+.input-container.invalid input {
+	border: 2px solid #06beb6;
 }

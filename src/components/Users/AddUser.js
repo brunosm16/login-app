@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
-import Label from '../UI/Label/Label';
 import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
 
@@ -15,7 +14,7 @@ const AddUser = ({ onAddUser }) => {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
 
-	// fields lengths lower limit
+	// fields limits
 	const strMin = 6;
 	const strMax = 256;
 
@@ -25,28 +24,10 @@ const AddUser = ({ onAddUser }) => {
 	const [isEmailValid, setIsEmailValid] = useState(true);
 	const [modalError, setModalError] = useState();
 
-	// check if string length is zero
-	const validStrInput = (str) => str.trim().length !== 0;
-
-	const areInputsValid = () => {
-		const loginValid = validStrInput(enteredLogin);
-		const passwordValid = validStrInput(enteredPassword);
-		const emailValid = validStrInput(enteredEmail);
-
-		if (!loginValid || !passwordValid || !emailValid) {
-			setModalError({
-				title: 'Invalid input',
-				message:
-					'Please enter a valid name, password and age (non-empty values)',
-			});
-		}
-
-		// update states
-		setIsLoginValid(loginValid);
-		setIsPasswordValid(passwordValid);
-		setIsEmailValid(emailValid);
-
-		return loginValid && passwordValid && emailValid;
+	const updateStates = (login, password, email) => {
+		setIsLoginValid(login);
+		setIsPasswordValid(password);
+		setIsEmailValid(email);
 	};
 
 	const resetStates = () => {
@@ -55,12 +36,25 @@ const AddUser = ({ onAddUser }) => {
 		setEnteredEmail('');
 	};
 
+	// check if string length is zero
+	const validStrInput = (str) => str.trim().length !== 0;
+
+	const areInputsValid = () => {
+		const loginValid = validStrInput(enteredLogin);
+		const passwordValid = validStrInput(enteredPassword);
+		const emailValid = validStrInput(enteredEmail);
+
+		// update states
+		updateStates(loginValid, passwordValid, emailValid);
+
+		return loginValid && passwordValid && emailValid;
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		const validForm = areInputsValid();
-
-		if (validForm) {
+		if (areInputsValid()) {
+			// send data to be saved
 			onAddUser({
 				login: enteredLogin,
 				password: enteredPassword,
@@ -69,6 +63,12 @@ const AddUser = ({ onAddUser }) => {
 
 			// reset form
 			resetStates();
+		} else {
+			setModalError({
+				title: 'Invalid input',
+				message:
+					'Please enter a valid name, password and age (non-empty values)',
+			});
 		}
 	};
 
@@ -85,7 +85,6 @@ const AddUser = ({ onAddUser }) => {
 	};
 
 	const modalHandler = () => {
-		console.log('here');
 		setModalError(null);
 	};
 
@@ -101,9 +100,10 @@ const AddUser = ({ onAddUser }) => {
 			<Card cssClass={styles.form}>
 				<form onSubmit={handleSubmit}>
 					{/* Login field */}
-					<FormControl isInvalid={isLoginValid}>
-						<Label htmlFor="login">Login</Label>
+					<FormControl>
 						<Input
+							label="login"
+							isValid={isLoginValid}
 							id="login"
 							type="text"
 							onChange={loginHandler}
@@ -114,9 +114,10 @@ const AddUser = ({ onAddUser }) => {
 					</FormControl>
 
 					{/* Email field */}
-					<FormControl isInvalid={isEmailValid}>
-						<Label htmlFor="email">Email</Label>
+					<FormControl>
 						<Input
+							label="email"
+							isValid={isEmailValid}
 							id="email"
 							type="email"
 							onChange={emailHandler}
@@ -127,9 +128,10 @@ const AddUser = ({ onAddUser }) => {
 					</FormControl>
 
 					{/* Password field */}
-					<FormControl isInvalid={isPasswordValid}>
-						<Label htmlFor="password">Password</Label>
+					<FormControl>
 						<Input
+							label="password"
+							isValid={isPasswordValid}
 							id="password"
 							type="password"
 							onChange={passwordHandler}
@@ -145,7 +147,7 @@ const AddUser = ({ onAddUser }) => {
 							<Button
 								isSubmit
 								onClick={handleSubmit}
-								customCss={styles['form-button']}
+								cssClass={styles['form-button']}
 							>
 								sign in
 							</Button>

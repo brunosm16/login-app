@@ -1,19 +1,18 @@
 .button {
 	width: 120px;
+	border-radius: 20px;
+	border: transparent;
 	outline: none;
+	background-color: #1a2a6c;
 	padding: 0.5rem;
 	font-size: 1rem;
 	text-transform: capitalize;
-	border-radius: 20px;
-	border: transparent;
-	cursor: pointer;
 	color: #fbfbfc;
-	background: #0024f1;
-	border-radius: 20px;
+	cursor: pointer;
 	transition: all 0.3s ease-in-out;
 }
 
 .button:hover {
-	background-color: #9fb3d2;
-	color: #354341;
+	color: #fff;
+	background-color: #2948ff;
 }

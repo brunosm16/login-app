@@ -1,48 +1,31 @@
-:root {
-	/* colors */
-	--clr-primary-1: #0024f1;
-	--clr-primary-2: #fbfbfc;
-	--clr-primary-3: #797d81;
-	--clr-primary-4: #354341;
-	--clr-primary-5: #9fb3d2;
-	--clr-red: #fc1919;
-
-	/* box shadows */
-	--box-shadow-dark: 0px 5px 8px rgba(0, 0, 0, 0.8);
-	--box-shadow-light: 0px 5px 12px rgba(123, 123, 123, 0.1);
-
-	--transition: all 0.3s ease-in-out;
-}
-
 .form {
-	padding: 0.75rem;
-	padding-bottom: 1.25rem;
-	max-width: 25rem;
+	/* fallback for old browsers */
+	background: #141e30;
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: -webkit-linear-gradient(to right, #243b55, #141e30);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: linear-gradient(to right, #243b55, #141e30);
 	width: 25rem;
 	max-width: 85%;
+	padding: 0.75rem;
 	height: 30rem;
 	margin: 2rem auto;
-	background-color: var(--clr-primary-2);
-	color: #888888;
 }
 
 .actions {
 	width: 100%;
 	display: flex;
 	align-items: flex-end;
-	height: 5rem;
-	margin-top: 1rem;
+	margin-top: 3rem;
 }
 
 .action {
 	display: flex;
-	justify-content: center;
-	align-items: center;
 	width: 100%;
 }
 
 .form-button {
-	width: 400px;
+	width: 23rem;
 	padding: 1rem;
 	font-weight: bold;
 }

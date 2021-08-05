@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import styles from './Button.module.css';
 
-const Button = ({ isSubmit, onClick, customCss, children }) => (
+const Button = ({ isSubmit, onClick, cssClass, children }) => (
 	<button
 		type={isSubmit ? 'submit' : 'button'}
 		onClick={onClick}
-		className={`${styles.button} ${customCss}`}
+		className={`${styles.button} ${cssClass}`}
 	>
 		{children}
 	</button>
@@ -16,13 +16,13 @@ export default Button;
 Button.defaultProps = {
 	isSubmit: true,
 	onClick: () => {},
-	customCss: '',
+	cssClass: '',
 	children: {},
 };
 
 Button.propTypes = {
 	isSubmit: PropTypes.bool,
 	onClick: PropTypes.func,
-	customCss: PropTypes.string,
+	cssClass: PropTypes.string,
 	children: PropTypes.node,
 };

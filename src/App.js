@@ -13,7 +13,7 @@ const App = () => {
 	return (
 		<div className="App">
 			<AddUser onAddUser={handleAddUser} />
-			<UsersList users={users} />
+			{users.length > 0 && <UsersList users={users} />}
 		</div>
 	);
 };

@@ -1,44 +1,16 @@
 .list__container {
-	background: #141e30; /* fallback for old browsers */
-	background: -webkit-linear-gradient(
-		to right,
-		#243b55,
-		#141e30
-	); /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(
-		to right,
-		#243b55,
-		#141e30
-	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+	/* fallback for old browsers */
+	background: #141e30;
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: -webkit-linear-gradient(to right, #243b55, #141e30);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: linear-gradient(to right, #243b55, #141e30);
 	margin: 1.25rem;
 }
 
 .users-list {
-	padding: 0.25rem;
 	width: 25rem;
-	list-style: none;
+	padding: 0.25rem;
 	max-height: 20rem;
-	overflow: auto;
 	margin: 1rem;
-}
-
-::-webkit-scrollbar {
-	margin: 1rem;
-	width: 1rem;
-}
-
-::-webkit-scrollbar-track {
-	border-radius: 15px;
-	background: #fff;
-}
-
-::-webkit-scrollbar-thumb {
-	border-radius: 15px;
-	background: #a0a0a0;
-	transition: all 0.3s ease-in-out;
-}
-
-::-webkit-scrollbar-thumb:hover {
-	background: #9d9d9d;
 }

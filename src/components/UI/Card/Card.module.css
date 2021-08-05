@@ -1,17 +1,9 @@
-:root {
-	/* box shadows */
-	--box-shadow-dark: 0px 5px 8px rgba(0, 0, 0, 0.8);
-	--box-shadow-light: 0px 5px 12px rgba(123, 123, 123, 0.1);
-
-	--transition: all 0.3s ease-in-out;
-}
-
 .card {
 	border-radius: 15px;
-	box-shadow: var(--box-shadow-dark);
-	transition: var(--transition);
+	box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.8);
+	transition: all 0.3s ease-in-out;
 }
 
 .card:hover {
-	box-shadow: var(--box-shadow-light);
+	box-shadow: 0px 5px 12px rgba(123, 123, 123, 0.1);
 }

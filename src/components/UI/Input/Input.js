@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import styles from './Input.module.css';
 
 const Input = ({
+	label,
+	isValid,
 	id,
 	type,
 	minLength,
@@ -10,18 +13,26 @@ const Input = ({
 	value,
 	cssClass,
 }) => (
-	<input
-		className={`${styles.input} ${cssClass}`}
-		id={id}
-		type={type}
-		minLength={minLength}
-		maxLength={maxLength}
-		onChange={onChange}
-		value={value}
-	/>
+	<div
+		className={`${styles['input-container']} ${
+			!isValid && styles.invalid
+		} ${cssClass}`}
+	>
+		<label htmlFor="id">{label}</label>
+		<input
+			id={id}
+			type={type}
+			minLength={minLength}
+			maxLength={maxLength}
+			onChange={onChange}
+			value={value}
+		/>
+	</div>
 );
 
 Input.defaultProps = {
+	label: '',
+	isValid: true,
 	id: '',
 	type: '',
 	minLength: 6,
@@ -32,6 +43,8 @@ Input.defaultProps = {
 };
 
 Input.propTypes = {
+	label: PropTypes.string,
+	isValid: PropTypes.bool,
 	id: PropTypes.string,
 	type: PropTypes.string,
 	minLength: PropTypes.number,
