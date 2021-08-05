@@ -1,21 +1,58 @@
 import PropTypes from 'prop-types';
 import styles from './UserItem.module.css';
+import Button from '../UI/Button/Button';
 
-const UserItem = ({login, email}) => (
-    <li className={styles.item}>
-        <p>{login}</p>
-        <p>{email}</p>
-    </li>
-);
+const UserItem = ({ id, login, email, onDeleteById, onEditById }) => {
+	const handleDelete = () => {
+		onDeleteById(id);
+	};
+
+	const handleEdit = () => {
+		onEditById(id);
+	};
+
+	return (
+		<li className={styles.item}>
+			<div className={styles['item-info']}>
+				<p>{login}</p>
+				<p>{email}</p>
+			</div>
+
+			<div className={styles.actions}>
+				<Button
+					isSubmit={false}
+					onClick={handleDelete}
+					cssClass={`${styles.btn} ${styles['delete-btn']}>`}
+				>
+					X
+				</Button>
+
+				<Button
+					isSubmit={false}
+					onClick={handleEdit}
+					cssClass={`${styles.btn} ${styles['edit-btn']}>`}
+				>
+					🖊️
+				</Button>
+			</div>
+		</li>
+	);
+};
 
 UserItem.defaultProps = {
-    login: 'empty login',
-    email: 'empty email'
-}
+	id: -1,
+	login: 'empty login',
+	email: 'empty email',
+	onDeleteById: () => {},
+	onEditById: () => {},
+};
 
 UserItem.propTypes = {
-    login: PropTypes.string,
-    email: PropTypes.string,
-}
+	id: PropTypes.number,
+	login: PropTypes.string,
+	email: PropTypes.string,
+	onDeleteById: PropTypes.func,
+	onEditById: PropTypes.func,
+};
 
 export default UserItem;

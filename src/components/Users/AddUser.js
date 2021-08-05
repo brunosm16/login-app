@@ -56,6 +56,7 @@ const AddUser = ({ onAddUser }) => {
 		if (areInputsValid()) {
 			// send data to be saved
 			onAddUser({
+				id: Math.random(),
 				login: enteredLogin,
 				password: enteredPassword,
 				email: enteredEmail,
