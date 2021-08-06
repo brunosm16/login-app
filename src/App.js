@@ -8,12 +8,37 @@ const App = () => {
 		{ id: 1, login: 'MockUser', email: 'MockUser@hotmail.com' },
 	]);
 
+	const [editId, setEditId] = useState();
+
+	const getUserById = (id) => users.filter((user) => user.id === id)[0];
+
+	const updateUsers = (editedUser) =>
+		users.map((user) => {
+			let currentUser = user;
+
+			if (editedUser.id === currentUser.id) {
+				// updates user
+				currentUser = editedUser;
+			}
+
+			return currentUser;
+		});
+
 	const handleAddUser = (data) => {
-		setUsers((previousData) => [data, ...previousData]);
+		// edit operation
+		if (editId) {
+			// reset editId value
+			setEditId(null);
+
+			return setUsers(updateUsers(data));
+		}
+
+		// add operation
+		return setUsers((previousData) => [data, ...previousData]);
 	};
 
 	const handleEditUser = (id) => {
-		console.log(id);
+		setEditId(id);
 	};
 
 	const handleDeleteUser = (id) => {
@@ -22,7 +47,12 @@ const App = () => {
 
 	return (
 		<div className="App">
-			<AddUser onAddUser={handleAddUser} />
+			<AddUser
+				onAddUser={handleAddUser}
+				editUserId={editId}
+				editUserLogin={editId && getUserById(editId).login}
+				editUserEmail={editId && getUserById(editId).email}
+			/>
 			{users.length > 0 && (
 				<UsersList
 					users={users}

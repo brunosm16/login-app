@@ -1,18 +1,25 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
 import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
-
 import styles from './AddUser.module.css';
 
-const AddUser = ({ onAddUser }) => {
+const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	// entered states
 	const [enteredLogin, setEnteredLogin] = useState('');
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
+
+	useEffect(() => {
+		setEnteredLogin(editUserLogin || enteredLogin);
+	}, [editUserLogin || enteredLogin]);
+
+	useEffect(() => {
+		setEnteredEmail(editUserEmail || enteredEmail);
+	}, [editUserEmail || enteredEmail]);
 
 	// fields limits
 	const strMin = 6;
@@ -56,7 +63,10 @@ const AddUser = ({ onAddUser }) => {
 		if (areInputsValid()) {
 			// send data to be saved
 			onAddUser({
-				id: Math.random(),
+				// checks if user already has an id, in this case
+				// user is getting updated
+				// eslint-disable-next-line no-unneeded-ternary
+				id: editUserId || Math.random(),
 				login: enteredLogin,
 				password: enteredPassword,
 				email: enteredEmail,
@@ -162,10 +172,16 @@ const AddUser = ({ onAddUser }) => {
 
 AddUser.defaultProps = {
 	onAddUser: () => {},
+	editUserId: undefined,
+	editUserLogin: '',
+	editUserEmail: '',
 };
 
 AddUser.propTypes = {
 	onAddUser: PropTypes.func,
+	editUserId: PropTypes.number,
+	editUserLogin: PropTypes.string,
+	editUserEmail: PropTypes.string,
 };
 
 export default AddUser;
