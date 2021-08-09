@@ -13,13 +13,16 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
 
-	useEffect(() => {
-		setEnteredLogin(editUserLogin || enteredLogin);
-	}, [editUserLogin || enteredLogin]);
+	const editLogin = editUserLogin || enteredLogin;
+	const editEmail = editUserEmail || enteredEmail;
 
 	useEffect(() => {
-		setEnteredEmail(editUserEmail || enteredEmail);
-	}, [editUserEmail || enteredEmail]);
+		setEnteredLogin(editLogin);
+	}, [editLogin]);
+
+	useEffect(() => {
+		setEnteredEmail(editEmail);
+	}, [editEmail]);
 
 	// fields limits
 	const strMin = 6;
