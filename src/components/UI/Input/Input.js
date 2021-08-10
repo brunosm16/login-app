@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import PropTypes from 'prop-types';
 import styles from './Input.module.css';
 
@@ -10,6 +9,7 @@ const Input = ({
 	minLength,
 	maxLength,
 	onChange,
+	onBlur,
 	value,
 	cssClass,
 }) => (
@@ -25,6 +25,7 @@ const Input = ({
 			minLength={minLength}
 			maxLength={maxLength}
 			onChange={onChange}
+			onBlur={onBlur}
 			value={value}
 		/>
 	</div>
@@ -38,6 +39,7 @@ Input.defaultProps = {
 	minLength: 6,
 	maxLength: 256,
 	onChange: () => {},
+	onBlur: () => {},
 	value: '',
 	cssClass: '',
 };
@@ -50,6 +52,7 @@ Input.propTypes = {
 	minLength: PropTypes.number,
 	maxLength: PropTypes.number,
 	onChange: PropTypes.func,
+	onBlur: PropTypes.func,
 	value: PropTypes.string,
 	cssClass: PropTypes.string,
 };

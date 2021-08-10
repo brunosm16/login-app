@@ -13,8 +13,20 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
 
+	// check if data was passed to edit login
 	const editLogin = editUserLogin || enteredLogin;
 	const editEmail = editUserEmail || enteredEmail;
+
+	// validation states
+	const [isLoginValid, setIsLoginValid] = useState(true);
+	const [isPasswordValid, setIsPasswordValid] = useState(true);
+	const [isEmailValid, setIsEmailValid] = useState(true);
+	const [formIsValid, setFormIsValid] = useState(true);
+	const [modalError, setModalError] = useState();
+
+	const verifyLogin = (login) => login.trim().length > 6;
+	const verifyEmail = (email) => email.trim().length > 6 && email.includes('@');
+	const verifyPassword = (password) => password.trim().length > 6;
 
 	useEffect(() => {
 		setEnteredLogin(editLogin);
@@ -24,21 +36,14 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		setEnteredEmail(editEmail);
 	}, [editEmail]);
 
-	// fields limits
-	const strMin = 6;
-	const strMax = 256;
+	// validate form when inputs are changed
+	useEffect(() => {
+		const loginValidation = verifyLogin(enteredLogin);
+		const emailValidation = verifyEmail(enteredEmail);
+		const passwordValidation = verifyPassword(enteredPassword);
 
-	// validation states
-	const [isLoginValid, setIsLoginValid] = useState(true);
-	const [isPasswordValid, setIsPasswordValid] = useState(true);
-	const [isEmailValid, setIsEmailValid] = useState(true);
-	const [modalError, setModalError] = useState();
-
-	const updateStates = (login, password, email) => {
-		setIsLoginValid(login);
-		setIsPasswordValid(password);
-		setIsEmailValid(email);
-	};
+		setFormIsValid(loginValidation && emailValidation && passwordValidation);
+	}, [enteredLogin, enteredEmail, enteredPassword]);
 
 	const resetStates = () => {
 		setEnteredLogin('');
@@ -46,60 +51,66 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		setEnteredEmail('');
 	};
 
-	// check if string length is zero
-	const validStrInput = (str) => str.trim().length !== 0;
-
-	const areInputsValid = () => {
-		const loginValid = validStrInput(enteredLogin);
-		const passwordValid = validStrInput(enteredPassword);
-		const emailValid = validStrInput(enteredEmail);
-
-		// update states
-		updateStates(loginValid, passwordValid, emailValid);
-
-		return loginValid && passwordValid && emailValid;
-	};
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-
-		if (areInputsValid()) {
-			// send data to be saved
-			onAddUser({
-				// checks if user already has an id, in this case
-				// user is getting updated
-				// eslint-disable-next-line no-unneeded-ternary
-				id: editUserId || Math.random(),
-				login: enteredLogin,
-				password: enteredPassword,
-				email: enteredEmail,
-			});
-
-			// reset form
-			resetStates();
-		} else {
-			setModalError({
-				title: 'Invalid input',
-				message:
-					'Please enter a valid name, password and age (non-empty values)',
-			});
-		}
-	};
-
 	const loginHandler = (event) => {
 		setEnteredLogin(event.target.value);
+	};
+
+	const loginValidateHandler = () => {
+		setIsLoginValid(verifyLogin(enteredLogin));
+		console.log(verifyLogin(enteredLogin));
 	};
 
 	const passwordHandler = (event) => {
 		setEnteredPassword(event.target.value);
 	};
 
+	const passwordValidateHandler = (event) => {
+		setIsPasswordValid(verifyPassword(event.target.value));
+	};
+
 	const emailHandler = (event) => {
 		setEnteredEmail(event.target.value);
 	};
 
+	const emailValidateHandler = (event) => {
+		setIsEmailValid(verifyEmail(event.target.value));
+	};
+
 	const modalHandler = () => {
 		setModalError(null);
+	};
+
+	const saveData = () => {
+		// send data to be saved
+		onAddUser({
+			// checks if user already has an id, in this case
+			// user is getting updated
+			// eslint-disable-next-line no-unneeded-ternary
+			id: editUserId || Math.random(),
+			login: enteredLogin,
+			password: enteredPassword,
+			email: enteredEmail,
+		});
+
+		// reset form
+		resetStates();
+	};
+
+	const showModal = () => {
+		setModalError({
+			title: 'Invalid input',
+			message: 'Please enter a valid name, password and age (non-empty values)',
+		});
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+
+		if (formIsValid) {
+			saveData();
+		} else {
+			showModal();
+		}
 	};
 
 	return (
@@ -121,9 +132,8 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 							id="login"
 							type="text"
 							onChange={loginHandler}
+							onBlur={loginValidateHandler}
 							value={enteredLogin}
-							minLength={strMin}
-							maxLength={strMax}
 						/>
 					</FormControl>
 
@@ -135,9 +145,8 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 							id="email"
 							type="email"
 							onChange={emailHandler}
+							onBlur={emailValidateHandler}
 							value={enteredEmail}
-							minLength={strMin}
-							maxLength={strMax}
 						/>
 					</FormControl>
 
@@ -149,9 +158,8 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 							id="password"
 							type="password"
 							onChange={passwordHandler}
+							onBlur={passwordValidateHandler}
 							value={enteredPassword}
-							minLength={strMin}
-							maxLength={strMax}
 						/>
 					</FormControl>
 
