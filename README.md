@@ -1,6 +1,6 @@
-# 🔒 Login App
+# 🔒 Register App
 
-Projeto que recebe os dados de usuário para realizar um login. Trata-se de um formulário feito para colocar em prática os fundamentos de React Js.
+Projeto que recebe os dados de usuário para realizar um registro. Trata-se de um formulário feito para colocar em prática os fundamentos de React Js.
 
 ## 💻 Tecnologias Utilizadas
 - JavaScript
