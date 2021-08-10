@@ -10,7 +10,7 @@ Projeto que recebe os dados de usuário para realizar um registro. Trata-se de u
 
 ## ▶️ Como executar a aplicação
 1.  Baixar o projeto ou realizar o _clone_ do projeto na máquina.
-2.  Entrar no diretório login-app.
+2.  Entrar no diretório register-app.
 3.  Instalar as dependências do projeto com o comando : `npm install`
 4.  Inicializar o projeto com o comando : `npm start`
 5.  Abrir o navegador em **https:/localhost:3000**
