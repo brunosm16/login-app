@@ -13,7 +13,7 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	const [enteredPassword, setEnteredPassword] = useState('');
 	const [enteredEmail, setEnteredEmail] = useState('');
 
-	// check if data was passed to edit login
+	// edit operation values
 	const editLogin = editUserLogin || enteredLogin;
 	const editEmail = editUserEmail || enteredEmail;
 
@@ -24,9 +24,10 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	const [formIsValid, setFormIsValid] = useState(true);
 	const [modalError, setModalError] = useState();
 
-	const verifyLogin = (login) => login.trim().length > 6;
-	const verifyEmail = (email) => email.trim().length > 6 && email.includes('@');
-	const verifyPassword = (password) => password.trim().length > 6;
+	const validateLogin = (login) => login.trim().length >= 6;
+	const validateEmail = (email) =>
+		email.trim().length >= 6 && email.includes('@');
+	const validatePassword = (password) => password.trim().length >= 6;
 
 	useEffect(() => {
 		setEnteredLogin(editLogin);
@@ -36,11 +37,11 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		setEnteredEmail(editEmail);
 	}, [editEmail]);
 
-	// validate form when inputs are changed
+	// validate form when inputs change
 	useEffect(() => {
-		const loginValidation = verifyLogin(enteredLogin);
-		const emailValidation = verifyEmail(enteredEmail);
-		const passwordValidation = verifyPassword(enteredPassword);
+		const loginValidation = validateLogin(enteredLogin);
+		const emailValidation = validateEmail(enteredEmail);
+		const passwordValidation = validatePassword(enteredPassword);
 
 		setFormIsValid(loginValidation && emailValidation && passwordValidation);
 	}, [enteredLogin, enteredEmail, enteredPassword]);
@@ -51,13 +52,18 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		setEnteredEmail('');
 	};
 
+	const updateValidationStates = () => {
+		setIsLoginValid(validateLogin(enteredLogin));
+		setIsEmailValid(validateEmail(enteredEmail));
+		setIsPasswordValid(validatePassword(enteredPassword));
+	};
+
 	const loginHandler = (event) => {
 		setEnteredLogin(event.target.value);
 	};
 
 	const loginValidateHandler = () => {
-		setIsLoginValid(verifyLogin(enteredLogin));
-		console.log(verifyLogin(enteredLogin));
+		setIsLoginValid(validateLogin(enteredLogin));
 	};
 
 	const passwordHandler = (event) => {
@@ -65,7 +71,7 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	};
 
 	const passwordValidateHandler = (event) => {
-		setIsPasswordValid(verifyPassword(event.target.value));
+		setIsPasswordValid(validatePassword(event.target.value));
 	};
 
 	const emailHandler = (event) => {
@@ -73,7 +79,7 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	};
 
 	const emailValidateHandler = (event) => {
-		setIsEmailValid(verifyEmail(event.target.value));
+		setIsEmailValid(validateEmail(event.target.value));
 	};
 
 	const modalHandler = () => {
@@ -85,7 +91,6 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		onAddUser({
 			// checks if user already has an id, in this case
 			// user is getting updated
-			// eslint-disable-next-line no-unneeded-ternary
 			id: editUserId || Math.random(),
 			login: enteredLogin,
 			password: enteredPassword,
@@ -96,7 +101,11 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		resetStates();
 	};
 
-	const showModal = () => {
+	const showErrors = () => {
+		// updates validation states
+		updateValidationStates();
+
+		// show Modal
 		setModalError({
 			title: 'Invalid input',
 			message: 'Please enter a valid name, password and age (non-empty values)',
@@ -109,7 +118,7 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 		if (formIsValid) {
 			saveData();
 		} else {
-			showModal();
+			showErrors();
 		}
 	};
 

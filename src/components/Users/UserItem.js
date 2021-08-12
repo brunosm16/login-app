@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import styles from './UserItem.module.css';
 import Button from '../UI/Button/Button';
 
-const UserItem = ({ id, login, email, onDeleteById, onEditById }) => {
+const UserItem = ({ id, login, email, onItemClick }) => {
 	const handleDelete = () => {
-		onDeleteById(id);
+		onItemClick(id, true);
 	};
 
 	const handleEdit = () => {
-		onEditById(id);
+		onItemClick(id, false);
 	};
 
 	return (
@@ -43,16 +43,14 @@ UserItem.defaultProps = {
 	id: -1,
 	login: 'empty login',
 	email: 'empty email',
-	onDeleteById: () => {},
-	onEditById: () => {},
+	onItemClick: () => {},
 };
 
 UserItem.propTypes = {
 	id: PropTypes.number,
 	login: PropTypes.string,
 	email: PropTypes.string,
-	onDeleteById: PropTypes.func,
-	onEditById: PropTypes.func,
+	onItemClick: () => {},
 };
 
 export default UserItem;

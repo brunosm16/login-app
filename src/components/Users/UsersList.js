@@ -4,14 +4,11 @@ import List from '../UI/List/List';
 import UserItem from './UserItem';
 import styles from './UsersList.module.css';
 
-const UsersList = ({ users, onDeleteUser, onEditUser }) => {
-	const handleDeleteById = (id) => {
-		onDeleteUser(id);
+const UsersList = ({ users, onOperation }) => {
+	const handleClick = (itemId, isDelete) => {
+		onOperation(itemId, isDelete);
 	};
 
-	const handleEditById = (id) => {
-		onEditUser(id);
-	};
 	return (
 		<Card cssClass={styles.list__container}>
 			<List cssClass={styles['users-list']}>
@@ -21,8 +18,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
 						id={user.id}
 						login={user.login}
 						email={user.email}
-						onDeleteById={handleDeleteById}
-						onEditById={handleEditById}
+						onItemClick={handleClick}
 					/>
 				))}
 			</List>
@@ -33,12 +29,10 @@ export default UsersList;
 
 UsersList.defaultProps = {
 	users: [],
-	onDeleteUser: () => {},
-	onEditUser: () => {},
+	onOperation: () => {},
 };
 
 UsersList.propTypes = {
 	users: PropTypes.arrayOf(PropTypes.object),
-	onDeleteUser: PropTypes.func,
-	onEditUser: PropTypes.func,
+	onOperation: PropTypes.func,
 };

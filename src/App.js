@@ -45,6 +45,9 @@ const App = () => {
 		setUsers((previousData) => previousData.filter((data) => data.id !== id));
 	};
 
+	const handleOperation = (userId, isDelete) =>
+		isDelete ? handleDeleteUser(userId) : handleEditUser(userId);
+
 	return (
 		<div className="App">
 			<AddUser
@@ -54,11 +57,7 @@ const App = () => {
 				editUserEmail={editId && getUserById(editId).email}
 			/>
 			{users.length > 0 && (
-				<UsersList
-					users={users}
-					onEditUser={handleEditUser}
-					onDeleteUser={handleDeleteUser}
-				/>
+				<UsersList users={users} onOperation={handleOperation} />
 			)}
 		</div>
 	);

@@ -18,7 +18,7 @@ const Input = ({
 			!isValid && styles.invalid
 		} ${cssClass}`}
 	>
-		<label htmlFor="id">{label}</label>
+		<label htmlFor={id}>{label}</label>
 		<input
 			id={id}
 			type={type}
