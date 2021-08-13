@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
@@ -7,105 +7,138 @@ import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
 import styles from './AddUser.module.css';
 
-const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
-	// entered states
-	const [enteredLogin, setEnteredLogin] = useState('');
-	const [enteredPassword, setEnteredPassword] = useState('');
-	const [enteredEmail, setEnteredEmail] = useState('');
+const validateLogin = (login) => login.trim().length >= 3;
+const validateEmail = (email) =>
+	email.trim().length >= 6 && email.includes('@');
+const validatePassword = (password) => password.trim().length >= 6;
 
-	// edit operation values
-	const editLogin = editUserLogin || enteredLogin;
-	const editEmail = editUserEmail || enteredEmail;
+const loginReducer = (state, action) => {
+	if (action.type === 'INPUT_USER') {
+		return { value: action.val, isValid: validateLogin(action.val || '') };
+	}
 
-	// validation states
-	const [isLoginValid, setIsLoginValid] = useState(true);
-	const [isPasswordValid, setIsPasswordValid] = useState(true);
-	const [isEmailValid, setIsEmailValid] = useState(true);
+	if (action.type === 'INPUT_BLUR') {
+		return { value: state.value, isValid: validateLogin(state.value || '') };
+	}
+
+	return { value: '', isValid: true };
+};
+
+const passwordReducer = (state, action) => {
+	if (action.type === 'INPUT_USER') {
+		return { value: action.val, isValid: validatePassword(action.val || '') };
+	}
+
+	if (action.type === 'INPUT_BLUR') {
+		return { value: state.value, isValid: validatePassword(state.value || '') };
+	}
+
+	return { value: '', isValid: true };
+};
+
+const emailReducer = (state, action) => {
+	if (action.type === 'INPUT_USER') {
+		return { value: action.val, isValid: validateEmail(action.val || '') };
+	}
+
+	if (action.type === 'INPUT_BLUR') {
+		return { value: state.value, isValid: validateEmail(state.value || '') };
+	}
+
+	return { value: '', isValid: true };
+};
+
+const AddUser = ({ onAddUser, editId, editLogin, editEmail }) => {
 	const [formIsValid, setFormIsValid] = useState(true);
 	const [modalError, setModalError] = useState();
 
-	const validateLogin = (login) => login.trim().length >= 6;
-	const validateEmail = (email) =>
-		email.trim().length >= 6 && email.includes('@');
-	const validatePassword = (password) => password.trim().length >= 6;
+	const [loginState, dispatchLogin] = useReducer(loginReducer, {
+		value: '',
+		isValid: null,
+	});
+
+	const [emailState, dispatchEmail] = useReducer(emailReducer, {
+		value: '',
+		isValid: null,
+	});
+
+	const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
+		value: '',
+		isValid: null,
+	});
 
 	useEffect(() => {
-		setEnteredLogin(editLogin);
+		dispatchLogin({ type: 'INPUT_USER', val: editLogin || loginState.value });
 	}, [editLogin]);
 
 	useEffect(() => {
-		setEnteredEmail(editEmail);
+		dispatchEmail({
+			type: 'INPUT_USER',
+			val: editEmail || passwordState.value,
+		});
 	}, [editEmail]);
 
-	// validate form when inputs change
+	// Validate form when input changes
 	useEffect(() => {
-		const loginValidation = validateLogin(enteredLogin);
-		const emailValidation = validateEmail(enteredEmail);
-		const passwordValidation = validatePassword(enteredPassword);
+		const debouncerId = setTimeout(() => {
+			setFormIsValid(
+				loginState.isValid && emailState.isValid && passwordState.isValid
+			);
+		}, 500);
 
-		setFormIsValid(loginValidation && emailValidation && passwordValidation);
-	}, [enteredLogin, enteredEmail, enteredPassword]);
+		return () => {
+			clearTimeout(debouncerId);
+		};
+	}, [loginState, emailState, passwordState]);
 
-	const resetStates = () => {
-		setEnteredLogin('');
-		setEnteredPassword('');
-		setEnteredEmail('');
-	};
-
-	const updateValidationStates = () => {
-		setIsLoginValid(validateLogin(enteredLogin));
-		setIsEmailValid(validateEmail(enteredEmail));
-		setIsPasswordValid(validatePassword(enteredPassword));
+	// Reset states used in Form
+	const resetForm = () => {
+		dispatchLogin({ type: 'INPUT_USER', val: '' });
+		dispatchEmail({ type: 'INPUT_USER', val: '' });
+		dispatchPassword({ type: 'INPUT_USER', val: '' });
 	};
 
 	const loginHandler = (event) => {
-		setEnteredLogin(event.target.value);
+		dispatchLogin({ type: 'INPUT_USER', val: event.target.value });
 	};
 
 	const loginValidateHandler = () => {
-		setIsLoginValid(validateLogin(enteredLogin));
+		dispatchLogin({ type: 'INPUT_BLUR' });
 	};
 
 	const passwordHandler = (event) => {
-		setEnteredPassword(event.target.value);
+		dispatchPassword({ type: 'INPUT_USER', val: event.target.value });
 	};
 
-	const passwordValidateHandler = (event) => {
-		setIsPasswordValid(validatePassword(event.target.value));
+	const passwordValidateHandler = () => {
+		dispatchPassword({ type: 'INPUT_BLUR' });
 	};
 
 	const emailHandler = (event) => {
-		setEnteredEmail(event.target.value);
+		dispatchEmail({ type: 'INPUT_USER', val: event.target.value });
 	};
 
-	const emailValidateHandler = (event) => {
-		setIsEmailValid(validateEmail(event.target.value));
+	const emailValidateHandler = () => {
+		dispatchEmail({ type: 'INPUT_BLUR' });
 	};
 
 	const modalHandler = () => {
 		setModalError(null);
 	};
 
-	const saveData = () => {
-		// send data to be saved
+	const saveInput = () => {
 		onAddUser({
-			// checks if user already has an id, in this case
-			// user is getting updated
-			id: editUserId || Math.random(),
-			login: enteredLogin,
-			password: enteredPassword,
-			email: enteredEmail,
+			id: editId || Math.random(),
+			login: loginState.value,
+			password: passwordState.value,
+			email: emailState.value,
 		});
 
 		// reset form
-		resetStates();
+		resetForm();
 	};
 
-	const showErrors = () => {
-		// updates validation states
-		updateValidationStates();
-
-		// show Modal
+	const showModal = () => {
 		setModalError({
 			title: 'Invalid input',
 			message: 'Please enter a valid name, password and age (non-empty values)',
@@ -115,11 +148,7 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		if (formIsValid) {
-			saveData();
-		} else {
-			showErrors();
-		}
+		return formIsValid ? saveInput() : showModal();
 	};
 
 	return (
@@ -137,12 +166,12 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 					<FormControl>
 						<Input
 							label="login"
-							isValid={isLoginValid}
+							isValid={loginState.isValid}
 							id="login"
 							type="text"
 							onChange={loginHandler}
 							onBlur={loginValidateHandler}
-							value={enteredLogin}
+							value={loginState.value}
 						/>
 					</FormControl>
 
@@ -150,12 +179,12 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 					<FormControl>
 						<Input
 							label="email"
-							isValid={isEmailValid}
+							isValid={emailState.isValid}
 							id="email"
 							type="email"
 							onChange={emailHandler}
 							onBlur={emailValidateHandler}
-							value={enteredEmail}
+							value={emailState.value}
 						/>
 					</FormControl>
 
@@ -163,12 +192,12 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 					<FormControl>
 						<Input
 							label="password"
-							isValid={isPasswordValid}
+							isValid={passwordState.isValid}
 							id="password"
 							type="password"
 							onChange={passwordHandler}
 							onBlur={passwordValidateHandler}
-							value={enteredPassword}
+							value={passwordState.value}
 						/>
 					</FormControl>
 
@@ -192,16 +221,16 @@ const AddUser = ({ onAddUser, editUserId, editUserLogin, editUserEmail }) => {
 
 AddUser.defaultProps = {
 	onAddUser: () => {},
-	editUserId: undefined,
-	editUserLogin: '',
-	editUserEmail: '',
+	editId: undefined,
+	editLogin: '',
+	editEmail: '',
 };
 
 AddUser.propTypes = {
 	onAddUser: PropTypes.func,
-	editUserId: PropTypes.number,
-	editUserLogin: PropTypes.string,
-	editUserEmail: PropTypes.string,
+	editId: PropTypes.number,
+	editLogin: PropTypes.string,
+	editEmail: PropTypes.string,
 };
 
 export default AddUser;
