@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect, useReducer, useContext } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
 import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
 import styles from './AddUser.module.css';
+import UsersContext from '../../context/users-context';
 
 const validateLogin = (login) => login.trim().length >= 3;
 const validateEmail = (email) =>
@@ -48,7 +49,21 @@ const emailReducer = (state, action) => {
 	return { value: '', isValid: true };
 };
 
-const AddUser = ({ onAddUser, editId, editLogin, editEmail }) => {
+const AddUser = ({ onAddUser }) => {
+	const usersCtx = useContext(UsersContext);
+
+	const [editId, users] = [usersCtx.editId, usersCtx.users];
+
+	const editUser = () => {
+		if (users) {
+			return users.filter((user) => user.id === editId)[0];
+		}
+		return undefined;
+	};
+
+	const editLogin = editUser() ? editUser().login : undefined;
+	const editEmail = editUser() ? editUser().email : undefined;
+
 	const [formIsValid, setFormIsValid] = useState(true);
 	const [modalError, setModalError] = useState();
 
@@ -221,16 +236,10 @@ const AddUser = ({ onAddUser, editId, editLogin, editEmail }) => {
 
 AddUser.defaultProps = {
 	onAddUser: () => {},
-	editId: undefined,
-	editLogin: '',
-	editEmail: '',
 };
 
 AddUser.propTypes = {
 	onAddUser: PropTypes.func,
-	editId: PropTypes.number,
-	editLogin: PropTypes.string,
-	editEmail: PropTypes.string,
 };
 
 export default AddUser;

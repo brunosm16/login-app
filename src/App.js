@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AddUser from './components/Users/AddUser';
 import UsersList from './components/Users/UsersList';
 import './App.css';
+import UsersContext from './context/users-context';
 
 const MOCK_USERS = [
 	{ id: 1, login: 'Alexis Scott', email: 'Alexis_Scott@hotmail.com' },
@@ -52,17 +53,22 @@ const App = () => {
 		isDelete ? handleDeleteUser(userId) : setEditId(userId);
 
 	return (
-		<div className="App">
-			<AddUser
-				onAddUser={handleAddUser}
-				editId={editId}
-				editLogin={editId && getUserById(editId).login}
-				editEmail={editId && getUserById(editId).email}
-			/>
-			{users.length > 0 && (
+		<UsersContext.Provider
+			value={{
+				editId,
+				users,
+			}}
+		>
+			<div className="App">
+				<AddUser
+					onAddUser={handleAddUser}
+					editId={editId}
+					editLogin={editId && getUserById(editId).login}
+					editEmail={editId && getUserById(editId).email}
+				/>
 				<UsersList users={users} onOperation={handleOperation} />
-			)}
-		</div>
+			</div>
+		</UsersContext.Provider>
 	);
 };
 
