@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect, useReducer, useContext } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
@@ -49,7 +48,7 @@ const emailReducer = (state, action) => {
 	return { value: '', isValid: true };
 };
 
-const AddUser = ({ onAddUser }) => {
+const AddUser = () => {
 	const usersCtx = useContext(UsersContext);
 
 	const [editId, users] = [usersCtx.editId, usersCtx.users];
@@ -142,7 +141,7 @@ const AddUser = ({ onAddUser }) => {
 	};
 
 	const saveInput = () => {
-		onAddUser({
+		usersCtx.handleAddUser({
 			id: editId || Math.random(),
 			login: loginState.value,
 			password: passwordState.value,
@@ -232,14 +231,6 @@ const AddUser = ({ onAddUser }) => {
 			</Card>
 		</div>
 	);
-};
-
-AddUser.defaultProps = {
-	onAddUser: () => {},
-};
-
-AddUser.propTypes = {
-	onAddUser: PropTypes.func,
 };
 
 export default AddUser;

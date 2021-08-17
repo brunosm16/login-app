@@ -1,15 +1,11 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import styles from './UserItem.module.css';
 import Button from '../UI/Button/Button';
+import UsersContext from '../../context/users-context';
 
-const UserItem = ({ id, login, email, onItemClick }) => {
-	const handleDelete = () => {
-		onItemClick(id, true);
-	};
-
-	const handleEdit = () => {
-		onItemClick(id, false);
-	};
+const UserItem = ({ id, login, email }) => {
+	const ctx = useContext(UsersContext);
 
 	return (
 		<li className={styles.item}>
@@ -21,7 +17,7 @@ const UserItem = ({ id, login, email, onItemClick }) => {
 			<div className={styles.actions}>
 				<Button
 					isSubmit={false}
-					onClick={handleDelete}
+					onClick={() => ctx.handleOperation(id, true)}
 					cssClass={`${styles.btn} ${styles['delete-btn']}>`}
 				>
 					X
@@ -29,7 +25,7 @@ const UserItem = ({ id, login, email, onItemClick }) => {
 
 				<Button
 					isSubmit={false}
-					onClick={handleEdit}
+					onClick={() => ctx.handleOperation(id, false)}
 					cssClass={`${styles.btn} ${styles['edit-btn']}>`}
 				>
 					🖊️
@@ -40,17 +36,15 @@ const UserItem = ({ id, login, email, onItemClick }) => {
 };
 
 UserItem.defaultProps = {
-	id: -1,
-	login: 'empty login',
-	email: 'empty email',
-	onItemClick: () => {},
+	id: undefined,
+	login: '',
+	email: '',
 };
 
 UserItem.propTypes = {
 	id: PropTypes.number,
 	login: PropTypes.string,
 	email: PropTypes.string,
-	onItemClick: () => {},
 };
 
 export default UserItem;
