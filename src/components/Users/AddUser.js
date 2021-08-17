@@ -6,66 +6,14 @@ import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
 import styles from './AddUser.module.css';
 import UsersContext from '../../context/users-context';
-
-const validateLogin = (login) => login.trim().length >= 3;
-const validateEmail = (email) =>
-	email.trim().length >= 6 && email.includes('@');
-const validatePassword = (password) => password.trim().length >= 6;
-
-const loginReducer = (state, action) => {
-	if (action.type === 'INPUT_USER') {
-		return { value: action.val, isValid: validateLogin(action.val || '') };
-	}
-
-	if (action.type === 'INPUT_BLUR') {
-		return { value: state.value, isValid: validateLogin(state.value || '') };
-	}
-
-	return { value: '', isValid: true };
-};
-
-const passwordReducer = (state, action) => {
-	if (action.type === 'INPUT_USER') {
-		return { value: action.val, isValid: validatePassword(action.val || '') };
-	}
-
-	if (action.type === 'INPUT_BLUR') {
-		return { value: state.value, isValid: validatePassword(state.value || '') };
-	}
-
-	return { value: '', isValid: true };
-};
-
-const emailReducer = (state, action) => {
-	if (action.type === 'INPUT_USER') {
-		return { value: action.val, isValid: validateEmail(action.val || '') };
-	}
-
-	if (action.type === 'INPUT_BLUR') {
-		return { value: state.value, isValid: validateEmail(state.value || '') };
-	}
-
-	return { value: '', isValid: true };
-};
+import {
+	loginReducer,
+	emailReducer,
+	passwordReducer,
+} from '../../context/reducers/Reducers';
+import { findItemById, stateIsNull } from '../../utils/Utils';
 
 const AddUser = () => {
-	const usersCtx = useContext(UsersContext);
-
-	const [editId, users] = [usersCtx.editId, usersCtx.users];
-
-	const editUser = () => {
-		if (users) {
-			return users.filter((user) => user.id === editId)[0];
-		}
-		return undefined;
-	};
-
-	const editLogin = editUser() ? editUser().login : undefined;
-	const editEmail = editUser() ? editUser().email : undefined;
-
-	const [formIsValid, setFormIsValid] = useState(true);
-	const [modalError, setModalError] = useState();
-
 	const [loginState, dispatchLogin] = useReducer(loginReducer, {
 		value: '',
 		isValid: null,
@@ -81,18 +29,43 @@ const AddUser = () => {
 		isValid: null,
 	});
 
-	useEffect(() => {
-		dispatchLogin({ type: 'INPUT_USER', val: editLogin || loginState.value });
-	}, [editLogin]);
+	const [formIsValid, setFormIsValid] = useState(true);
+	const [modalError, setModalError] = useState();
 
-	useEffect(() => {
-		dispatchEmail({
-			type: 'INPUT_USER',
-			val: editEmail || passwordState.value,
-		});
-	}, [editEmail]);
+	const usersCtx = useContext(UsersContext);
+	const [editId, users] = [usersCtx.editId, usersCtx.users];
+	const editUser = findItemById(editId, users);
 
-	// Validate form when input changes
+	/**
+	 * Null is the initial value of name, on first page load,
+	 * input is valid because user didn't enter any input.
+	 */
+	const loginIsNull = stateIsNull(loginState);
+	const emailIsNull = stateIsNull(emailState);
+	const passwordIsNull = stateIsNull(passwordState);
+
+	/**
+	 * On edit operation, a new value for editUser is set,
+	 * and useEffect updates input states with editUser properties.
+	 */
+
+	useEffect(
+		() =>
+			editUser &&
+			dispatchLogin({
+				type: 'INPUT_USER',
+				val: editUser.login,
+			}),
+		[editUser]
+	);
+
+	useEffect(
+		() =>
+			editUser && dispatchEmail({ type: 'INPUT_USER', val: editUser.email }),
+		[editUser]
+	);
+
+	/** Validate form when input changes */
 	useEffect(() => {
 		const debouncerId = setTimeout(() => {
 			setFormIsValid(
@@ -105,11 +78,11 @@ const AddUser = () => {
 		};
 	}, [loginState, emailState, passwordState]);
 
-	// Reset states used in Form
+	/**  Reset states used in Form */
 	const resetForm = () => {
-		dispatchLogin({ type: 'INPUT_USER', val: '' });
-		dispatchEmail({ type: 'INPUT_USER', val: '' });
-		dispatchPassword({ type: 'INPUT_USER', val: '' });
+		dispatchLogin({});
+		dispatchEmail({});
+		dispatchPassword({});
 	};
 
 	const loginHandler = (event) => {
@@ -148,7 +121,7 @@ const AddUser = () => {
 			email: emailState.value,
 		});
 
-		// reset form
+		/** Reset form */
 		resetForm();
 	};
 
@@ -161,6 +134,13 @@ const AddUser = () => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
+
+		/** On first page load set isValid to false,
+		 * if user tries to input a empty value
+		 */
+		dispatchLogin({ type: 'INPUT_BLUR' });
+		dispatchPassword({ type: 'INPUT_BLUR' });
+		dispatchEmail({ type: 'INPUT_BLUR' });
 
 		return formIsValid ? saveInput() : showModal();
 	};
@@ -180,7 +160,7 @@ const AddUser = () => {
 					<FormControl>
 						<Input
 							label="login"
-							isValid={loginState.isValid}
+							isValid={loginIsNull}
 							id="login"
 							type="text"
 							onChange={loginHandler}
@@ -193,7 +173,7 @@ const AddUser = () => {
 					<FormControl>
 						<Input
 							label="email"
-							isValid={emailState.isValid}
+							isValid={emailIsNull}
 							id="email"
 							type="email"
 							onChange={emailHandler}
@@ -206,7 +186,7 @@ const AddUser = () => {
 					<FormControl>
 						<Input
 							label="password"
-							isValid={passwordState.isValid}
+							isValid={passwordIsNull}
 							id="password"
 							type="password"
 							onChange={passwordHandler}
