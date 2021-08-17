@@ -1,34 +1,53 @@
 import PropTypes from 'prop-types';
+import React, { useRef, useImperativeHandle } from 'react';
 import styles from './Input.module.css';
 
-const Input = ({
-	label,
-	isValid,
-	id,
-	type,
-	minLength,
-	maxLength,
-	onChange,
-	onBlur,
-	value,
-	cssClass,
-}) => (
-	<div
-		className={`${styles['input-container']} ${
-			!isValid && styles.invalid
-		} ${cssClass}`}
-	>
-		<label htmlFor={id}>{label}</label>
-		<input
-			id={id}
-			type={type}
-			minLength={minLength}
-			maxLength={maxLength}
-			onChange={onChange}
-			onBlur={onBlur}
-			value={value}
-		/>
-	</div>
+const Input = React.forwardRef(
+	(
+		{
+			label,
+			isValid,
+			id,
+			type,
+			minLength,
+			maxLength,
+			onChange,
+			onBlur,
+			value,
+			cssClass,
+		},
+		ref
+	) => {
+		const inputRef = useRef();
+
+		const activate = () => {
+			inputRef.current.focus();
+		};
+
+		useImperativeHandle(ref, () => ({
+			focus: activate,
+		}));
+
+		return (
+			<div
+				className={`${styles['input-container']} ${
+					!isValid && styles.invalid
+				} ${cssClass}`}
+			>
+				<label htmlFor={id}>{label}</label>
+				<input
+					id={id}
+					type={type}
+					minLength={minLength}
+					maxLength={maxLength}
+					onChange={onChange}
+					onBlur={onBlur}
+					value={value}
+					ref={inputRef}
+				/>
+			</div>
+		);
+	}
 );
 
 Input.defaultProps = {

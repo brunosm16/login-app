@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, useContext } from 'react';
+import { useState, useEffect, useReducer, useContext, useRef } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
@@ -35,6 +35,10 @@ const AddUser = () => {
 	const usersCtx = useContext(UsersContext);
 	const [editId, users] = [usersCtx.editId, usersCtx.users];
 	const editUser = findItemById(editId, users);
+
+	const loginRef = useRef();
+	const emailRef = useRef();
+	const passwordRef = useRef();
 
 	/**
 	 * Null is the initial value of name, on first page load,
@@ -78,6 +82,22 @@ const AddUser = () => {
 		};
 	}, [loginState, emailState, passwordState]);
 
+	const findFocusInput = () => {
+		if (!loginState.isValid) {
+			loginRef.current.focus();
+			return;
+		}
+
+		if (!emailState.isValid) {
+			emailRef.current.focus();
+			return;
+		}
+
+		if (!passwordState.isValid) {
+			passwordRef.current.focus();
+		}
+	};
+
 	/**  Reset states used in Form */
 	const resetForm = () => {
 		dispatchLogin({});
@@ -111,6 +131,9 @@ const AddUser = () => {
 
 	const modalHandler = () => {
 		setModalError(null);
+
+		/** Focus on invalid Input */
+		findFocusInput();
 	};
 
 	const saveInput = () => {
@@ -166,6 +189,7 @@ const AddUser = () => {
 							onChange={loginHandler}
 							onBlur={loginValidateHandler}
 							value={loginState.value}
+							ref={loginRef}
 						/>
 					</FormControl>
 
@@ -179,6 +203,7 @@ const AddUser = () => {
 							onChange={emailHandler}
 							onBlur={emailValidateHandler}
 							value={emailState.value}
+							ref={emailRef}
 						/>
 					</FormControl>
 
@@ -192,6 +217,7 @@ const AddUser = () => {
 							onChange={passwordHandler}
 							onBlur={passwordValidateHandler}
 							value={passwordState.value}
+							ref={passwordRef}
 						/>
 					</FormControl>
 
