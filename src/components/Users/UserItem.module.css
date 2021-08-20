@@ -1,13 +1,13 @@
 .item {
 	display: flex;
 	flex-direction: column;
-	background: var(--clr-primary-2);
+	background: var(--bg-clr-1);
 	width: 90%;
 	padding: 0 1rem;
 	margin: 0.75rem auto;
 	font-size: 0.875rem;
 	border-radius: 15px;
-	color: var(--bg-clr-1);
+	color: var(--clr-white);
 	font-weight: bold;
 }
 
@@ -51,5 +51,10 @@
 	.item,
 	.btn {
 		font-size: 1.4rem;
+	}
+
+	.btn {
+		margin: 0.5rem;
+		width: 20%;
 	}
 }

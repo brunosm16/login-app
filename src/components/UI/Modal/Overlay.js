@@ -23,15 +23,15 @@ const Overlay = ({ title, message, onCloseModal }) => (
 );
 
 Overlay.defaultProps = {
-	onCloseModal: PropTypes.func,
-	title: PropTypes.string,
-	message: PropTypes.string,
+	onCloseModal: () => {},
+	title: '',
+	message: '',
 };
 
 Overlay.propTypes = {
-	title: '',
-	message: '',
-	onCloseModal: () => {},
+	title: PropTypes.string,
+	message: PropTypes.string,
+	onCloseModal: PropTypes.func,
 };
 
 export default Overlay;
