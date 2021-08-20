@@ -1,6 +1,6 @@
 # 🔒 Register App
 
-Projeto que recebe os dados de usuário para realizar um registro. Trata-se de um formulário feito para colocar em prática os fundamentos de React Js.
+Recebe os dados de um usuário para realizar um cadastro.
 
 ## 💻 Tecnologias Utilizadas
 
@@ -11,19 +11,19 @@ Projeto que recebe os dados de usuário para realizar um registro. Trata-se de u
 
 ## ▶️ Como executar a aplicação
 
-1.  Baixar o projeto ou realizar o _clone_ do projeto na máquina.
+1.  Baixar ou clonar do projeto na máquina.
 2.  Entrar no diretório register-app.
 3.  Instalar as dependências do projeto com o comando : `npm install`
 4.  Inicializar o projeto com o comando : `npm start`
-5.  Abrir o navegador em **https:/localhost:3000**
+5.  Abrir o navegador em `https:/localhost:3000`
 
-## ⚒️ Recursos que faltam ser implementados na aplicação
+## ⚒️ Recursos a serem implementados na aplicação
 
 - Integração com Banco de Dados.
-- Deploy.
-- Validação.
+- Validação de formulários.
 - Uso de SASS para organizar o CSS da aplicação.
+- Deploy.
 
 ## 📸 Screenshots
 
-![enter image description here](https://i.ibb.co/P9LSjCb/login-app.png)
+![enter image description here](https://i.ibb.co/7nkNzyR/register-app.png)
