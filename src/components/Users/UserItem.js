@@ -20,7 +20,7 @@ const UserItem = ({ id, login, email }) => {
 					onClick={() => ctx.handleOperation(id, true)}
 					cssClass={`${styles.btn} ${styles['delete-btn']}>`}
 				>
-					X
+					✖
 				</Button>
 
 				<Button
@@ -28,7 +28,7 @@ const UserItem = ({ id, login, email }) => {
 					onClick={() => ctx.handleOperation(id, false)}
 					cssClass={`${styles.btn} ${styles['edit-btn']}>`}
 				>
-					🖊️
+					✎
 				</Button>
 			</div>
 		</li>

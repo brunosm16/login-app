@@ -1,8 +1,13 @@
-import { useState, useEffect, useReducer, useContext, useRef } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useReducer,
+	useContext,
+	useRef,
+} from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
-import FormControl from '../UI/Form/FormControl';
 import ErrorModal from '../UI/Modal/ErrorModal';
 import styles from './AddUser.module.css';
 import UsersContext from '../../context/users-context';
@@ -169,7 +174,7 @@ const AddUser = () => {
 	};
 
 	return (
-		<div>
+		<>
 			{modalError && (
 				<ErrorModal
 					title={modalError.title}
@@ -177,51 +182,52 @@ const AddUser = () => {
 					onCloseModal={modalHandler}
 				/>
 			)}
-			<Card cssClass={styles.form}>
-				<form onSubmit={handleSubmit}>
-					{/* Login field */}
-					<FormControl>
-						<Input
-							label="login"
-							isValid={loginIsNull}
-							id="login"
-							type="text"
-							onChange={loginHandler}
-							onBlur={loginValidateHandler}
-							value={loginState.value}
-							ref={loginRef}
-						/>
-					</FormControl>
+			<Card cssClass={styles['form-container']}>
+				<form className={styles.form} onSubmit={handleSubmit}>
+					<div className={styles.controls}>
+						<div className={styles.control}>
+							<Input
+								label="login"
+								isValid={loginIsNull}
+								id="login"
+								type="text"
+								onChange={loginHandler}
+								onBlur={loginValidateHandler}
+								value={loginState.value}
+								ref={loginRef}
+								cssClass={styles['control-input']}
+							/>
+						</div>
 
-					{/* Email field */}
-					<FormControl>
-						<Input
-							label="email"
-							isValid={emailIsNull}
-							id="email"
-							type="email"
-							onChange={emailHandler}
-							onBlur={emailValidateHandler}
-							value={emailState.value}
-							ref={emailRef}
-						/>
-					</FormControl>
+						<div className={styles.control}>
+							<Input
+								label="email"
+								isValid={emailIsNull}
+								id="email"
+								type="email"
+								onChange={emailHandler}
+								onBlur={emailValidateHandler}
+								value={emailState.value}
+								ref={emailRef}
+								cssClass={styles['control-input']}
+							/>
+						</div>
 
-					{/* Password field */}
-					<FormControl>
-						<Input
-							label="password"
-							isValid={passwordIsNull}
-							id="password"
-							type="password"
-							onChange={passwordHandler}
-							onBlur={passwordValidateHandler}
-							value={passwordState.value}
-							ref={passwordRef}
-						/>
-					</FormControl>
+						<div className={styles.control}>
+							<Input
+								label="password"
+								isValid={passwordIsNull}
+								id="password"
+								type="password"
+								onChange={passwordHandler}
+								onBlur={passwordValidateHandler}
+								value={passwordState.value}
+								ref={passwordRef}
+								cssClass={styles['control-input']}
+							/>
+						</div>
+					</div>
 
-					{/* Buttons */}
 					<div className={styles.actions}>
 						<div className={styles.action}>
 							<Button
@@ -235,7 +241,7 @@ const AddUser = () => {
 					</div>
 				</form>
 			</Card>
-		</div>
+		</>
 	);
 };
 

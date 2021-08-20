@@ -1,0 +1,71 @@
+.overlay {
+	position: fixed;
+	top: 30vh;
+	left: 5%;
+	max-width: 90%;
+	border-radius: 15px;
+	color: #fff;
+	overflow: hidden;
+	z-index: 100;
+	background: var(--bg-clr-1);
+	font-size: 0.75rem;
+}
+
+.overlay__header {
+	padding: 0.5rem;
+	color: #fbfbfc;
+	background: var(--bg-clr-2);
+	font-weight: bold;
+	border-top-right-radius: 15px;
+	border-top-left-radius: 15px;
+	text-transform: capitalize;
+}
+
+.overlay__header h2 {
+	margin-left: 0.75rem;
+}
+
+.overlay__main {
+	font-size: 0.75rem;
+	font-weight: bold;
+	padding: 1rem;
+}
+
+.overlay__actions {
+	display: flex;
+	justify-content: flex-end;
+	padding: 1rem;
+}
+
+.overlay__actions button {
+	background: var(--bg-clr-3);
+	width: 30%;
+}
+
+.overlay__actions button:hover {
+	background: var(--clr-primary-3);
+}
+
+/* Pixel 2 */
+@media screen and (min-width: 411px) {
+	.overlay,
+	.overlay__main,
+	.overlay__actions button {
+		font-size: 1rem;
+	}
+}
+
+/* iPad */
+@media screen and (min-width: 768px) {
+	.overlay {
+		left: calc(50% - 20rem);
+		top: 10vh;
+		width: 40rem;
+	}
+
+	.overlay,
+	.overlay__main,
+	.overlay__actions button {
+		font-size: 1.3rem;
+	}
+}

@@ -1,38 +1,26 @@
 import PropTypes from 'prop-types';
-import styles from './ErrorModal.module.css';
-import Button from '../Button/Button';
-import Card from '../Card/Card';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Backdrop from './Backdrop';
+import Overlay from './Overlay';
 
 const ErrorModal = ({ title, message, onCloseModal }) => (
-	<div>
-		<div
-			className={styles.backdrop}
-			onClick={onCloseModal}
-			aria-hidden="true"
-		/>
-		<Card cssClass={`${styles.modal}`}>
-			<header className={styles.modal__header}>
-				<h2>{title}</h2>
-			</header>
+	<>
+		{ReactDOM.createPortal(
+			<Backdrop onCloseModal={onCloseModal} />,
+			document.getElementById('backdrop')
+		)}
 
-			<main className={styles.modal__main}>
-				<p>{message}</p>
-			</main>
-
-			<footer className={styles.modal__actions}>
-				<Button type="button" onClick={onCloseModal}>
-					OK
-				</Button>
-			</footer>
-		</Card>
-	</div>
+		{ReactDOM.createPortal(
+			<Overlay title={title} message={message} onCloseModal={onCloseModal} />,
+			document.getElementById('overlay')
+		)}
+	</>
 );
 
-export default ErrorModal;
-
 ErrorModal.defaultProps = {
-	title: 'Invalid input',
-	message: 'Please enter a valid input',
+	title: '',
+	message: '',
 	onCloseModal: () => {},
 };
 
@@ -41,3 +29,5 @@ ErrorModal.propTypes = {
 	message: PropTypes.string,
 	onCloseModal: PropTypes.func,
 };
+
+export default ErrorModal;

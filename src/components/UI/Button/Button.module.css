@@ -1,11 +1,11 @@
 .button {
-	width: 120px;
 	border-radius: 20px;
 	border: transparent;
 	outline: none;
 	background-color: #1a2a6c;
 	padding: 0.5rem;
 	font-size: 1rem;
+	font-weight: bold;
 	text-transform: capitalize;
 	color: #fbfbfc;
 	cursor: pointer;

@@ -4,18 +4,7 @@ import styles from './Input.module.css';
 
 const Input = React.forwardRef(
 	(
-		{
-			label,
-			isValid,
-			id,
-			type,
-			minLength,
-			maxLength,
-			onChange,
-			onBlur,
-			value,
-			cssClass,
-		},
+		{ label, isValid, id, type, min, max, onChange, onBlur, value, cssClass },
 		ref
 	) => {
 		const inputRef = useRef();
@@ -30,7 +19,7 @@ const Input = React.forwardRef(
 
 		return (
 			<div
-				className={`${styles['input-container']} ${
+				className={`${styles.container} ${
 					!isValid && styles.invalid
 				} ${cssClass}`}
 			>
@@ -38,8 +27,8 @@ const Input = React.forwardRef(
 				<input
 					id={id}
 					type={type}
-					minLength={minLength}
-					maxLength={maxLength}
+					min={min}
+					max={max}
 					onChange={onChange}
 					onBlur={onBlur}
 					value={value}
@@ -55,8 +44,8 @@ Input.defaultProps = {
 	isValid: true,
 	id: '',
 	type: '',
-	minLength: 6,
-	maxLength: 256,
+	min: 6,
+	max: 256,
 	onChange: () => {},
 	onBlur: () => {},
 	value: '',
@@ -68,8 +57,8 @@ Input.propTypes = {
 	isValid: PropTypes.bool,
 	id: PropTypes.string,
 	type: PropTypes.string,
-	minLength: PropTypes.number,
-	maxLength: PropTypes.number,
+	min: PropTypes.number,
+	max: PropTypes.number,
 	onChange: PropTypes.func,
 	onBlur: PropTypes.func,
 	value: PropTypes.string,

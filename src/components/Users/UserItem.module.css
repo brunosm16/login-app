@@ -1,20 +1,55 @@
 .item {
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    color:#fff;
-    font-weight: bold;
-    margin-right: 1.75rem;
+	display: flex;
+	flex-direction: column;
+	background: var(--clr-primary-2);
+	width: 90%;
+	padding: 0 1rem;
+	margin: 0.75rem auto;
+	font-size: 0.875rem;
+	border-radius: 15px;
+	color: var(--bg-clr-1);
+	font-weight: bold;
 }
 
 .actions {
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.25rem;
-    margin: 0.25rem;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 0.25rem;
+	width: 100%;
+	margin: 0.75rem;
 }
 
 .btn {
-    width: 50px;
+	width: 30%;
+	font-size: 0.875rem;
+	background: var(--bg-clr-2);
+}
+
+.btn:hover {
+	background: var(--clr-primary-3);
+}
+
+/* Pixel 2 */
+@media screen and (min-width: 411px) {
+	.item,
+	.btn {
+		font-size: 1.125rem;
+	}
+}
+
+/* iPad */
+@media screen and (min-width: 768px) {
+	.item,
+	.btn {
+		font-size: 1.2rem;
+	}
+}
+
+/* Laptop */
+@media screen and (min-width: 1336px) {
+	.item,
+	.btn {
+		font-size: 1.4rem;
+	}
 }
