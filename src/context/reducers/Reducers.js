@@ -6,6 +6,7 @@ import {
 
 const USER = 'INPUT_USER';
 const BLUR = 'INPUT_BLUR';
+const CLEAR = 'INPUT_CLEAR';
 
 export const loginReducer = (state, action) => {
 	if (action.type === USER) {
@@ -16,7 +17,11 @@ export const loginReducer = (state, action) => {
 		return { value: state.value, isValid: validateLogin(state.value || '') };
 	}
 
-	return { value: '', isValid: true };
+	if (action.type === CLEAR) {
+		return { value: '', isValid: null };
+	}
+
+	return { value: '', isValid: false };
 };
 
 export const passwordReducer = (state, action) => {
@@ -28,7 +33,11 @@ export const passwordReducer = (state, action) => {
 		return { value: state.value, isValid: validatePassword(state.value || '') };
 	}
 
-	return { value: '', isValid: true };
+	if (action.type === CLEAR) {
+		return { value: '', isValid: null };
+	}
+
+	return { value: '', isValid: false };
 };
 
 export const emailReducer = (state, action) => {
@@ -40,5 +49,9 @@ export const emailReducer = (state, action) => {
 		return { value: state.value, isValid: validateEmail(state.value || '') };
 	}
 
-	return { value: '', isValid: true };
+	if (action.type === CLEAR) {
+		return { value: '', isValid: null };
+	}
+
+	return { value: '', isValid: false };
 };

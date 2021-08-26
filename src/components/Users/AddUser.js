@@ -105,9 +105,9 @@ const AddUser = () => {
 
 	/**  Reset states used in Form */
 	const resetForm = () => {
-		dispatchLogin({});
-		dispatchEmail({});
-		dispatchPassword({});
+		dispatchLogin({type: 'INPUT_CLEAR'});
+		dispatchEmail({type: 'INPUT_CLEAR'});
+		dispatchPassword({type:'INPUT_CLEAR'})
 	};
 
 	const loginHandler = (event) => {
@@ -143,7 +143,6 @@ const AddUser = () => {
 
 	const saveInput = () => {
 		usersCtx.handleAddUser({
-			id: editId || Math.random(),
 			login: loginState.value,
 			password: passwordState.value,
 			email: emailState.value,

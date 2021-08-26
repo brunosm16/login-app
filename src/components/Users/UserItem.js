@@ -42,7 +42,7 @@ UserItem.defaultProps = {
 };
 
 UserItem.propTypes = {
-	id: PropTypes.number,
+	id: PropTypes.string,
 	login: PropTypes.string,
 	email: PropTypes.string,
 };
