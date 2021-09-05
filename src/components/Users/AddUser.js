@@ -8,15 +8,16 @@ import React, {
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
-import ErrorModal from '../UI/Modal/ErrorModal';
 import styles from './AddUser.module.css';
 import UsersContext from '../../context/users-context';
+import UseHttp from '../../hooks/use-http';
 import {
 	loginReducer,
 	emailReducer,
 	passwordReducer,
 } from '../../context/reducers/Reducers';
 import { findItemById, stateIsNull } from '../../utils/Utils';
+import ENDPOINT from '../../utils/HttpUtils';
 
 const AddUser = () => {
 	const [loginState, dispatchLogin] = useReducer(loginReducer, {
@@ -34,8 +35,10 @@ const AddUser = () => {
 		isValid: null,
 	});
 
+	const { sendRequest: postRequest } = UseHttp();
+	const { sendRequest: patchRequest } = UseHttp();
+
 	const [formIsValid, setFormIsValid] = useState(true);
-	const [modalError, setModalError] = useState();
 
 	const usersCtx = useContext(UsersContext);
 	const [editId, users] = [usersCtx.editId, usersCtx.users];
@@ -87,6 +90,27 @@ const AddUser = () => {
 		};
 	}, [loginState, emailState, passwordState]);
 
+	const updateUser = (user) => {
+		const updatedUser = {
+			...user,
+			id: editId,
+		};
+
+		usersCtx.handleUpdateUser(updatedUser);
+	};
+
+	const insertUser = (user, userData) => {
+		const insertedUser = {
+			...user,
+			id: userData.name,
+		};
+		usersCtx.handleInsertUser(insertedUser);
+	};
+
+	const openCloseModal = (errorObj) => {
+		usersCtx.handleUpdateModal(errorObj);
+	};
+
 	const findFocusInput = () => {
 		if (!loginState.isValid) {
 			loginRef.current.focus();
@@ -105,9 +129,9 @@ const AddUser = () => {
 
 	/**  Reset states used in Form */
 	const resetForm = () => {
-		dispatchLogin({type: 'INPUT_CLEAR'});
-		dispatchEmail({type: 'INPUT_CLEAR'});
-		dispatchPassword({type:'INPUT_CLEAR'})
+		dispatchLogin({ type: 'INPUT_CLEAR' });
+		dispatchEmail({ type: 'INPUT_CLEAR' });
+		dispatchPassword({ type: 'INPUT_CLEAR' });
 	};
 
 	const loginHandler = (event) => {
@@ -134,29 +158,38 @@ const AddUser = () => {
 		dispatchEmail({ type: 'INPUT_BLUR' });
 	};
 
-	const modalHandler = () => {
-		setModalError(null);
-
-		/** Focus on invalid Input */
-		findFocusInput();
-	};
-
 	const saveInput = () => {
-		usersCtx.handleAddUser({
+		const inputObj = {
 			login: loginState.value,
 			password: passwordState.value,
 			email: emailState.value,
-		});
+		};
+
+		const reqObj = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		// Patch operation
+		if (editId) {
+			reqObj.method = 'PATCH';
+			reqObj.url = `${ENDPOINT}/users/${editId}/.json`;
+			reqObj.body = inputObj;
+
+			patchRequest(reqObj, updateUser, openCloseModal);
+
+			usersCtx.handleSetEditId(null);
+		} else {
+			reqObj.method = 'POST';
+			reqObj.url = `${ENDPOINT}/users.json`;
+			reqObj.body = inputObj;
+
+			postRequest(reqObj, insertUser.bind(null, inputObj), openCloseModal);
+		}
 
 		/** Reset form */
 		resetForm();
-	};
-
-	const showModal = () => {
-		setModalError({
-			title: 'Invalid input',
-			message: 'Please enter a valid name, password and age (non-empty values)',
-		});
 	};
 
 	const handleSubmit = (event) => {
@@ -169,18 +202,11 @@ const AddUser = () => {
 		dispatchPassword({ type: 'INPUT_BLUR' });
 		dispatchEmail({ type: 'INPUT_BLUR' });
 
-		return formIsValid ? saveInput() : showModal();
+		return formIsValid ? saveInput() : findFocusInput();
 	};
 
 	return (
 		<>
-			{modalError && (
-				<ErrorModal
-					title={modalError.title}
-					message={modalError.message}
-					onCloseModal={modalHandler}
-				/>
-			)}
 			<Card cssClass={styles['form-container']}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<div className={styles.controls}>

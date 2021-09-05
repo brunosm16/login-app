@@ -12,7 +12,9 @@ export const validatePassword = (password) => password.trim().length >= 6;
  * Search for a item with an id equals to the id passed as argument
  */
 export const findItemById = (id, items) =>
-	items.length > 0 ? items.filter((exercise) => exercise.id === id)[0] : undefined;
+	items.length > 0
+		? items.filter((exercise) => exercise.id === id)[0]
+		: undefined;
 
 /**
  * State passed as argument needs to have a property isValid.

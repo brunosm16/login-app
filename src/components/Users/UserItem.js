@@ -3,9 +3,43 @@ import { useContext } from 'react';
 import styles from './UserItem.module.css';
 import Button from '../UI/Button/Button';
 import UsersContext from '../../context/users-context';
+import UseHttp from '../../hooks/use-http';
+import ENDPOINT from '../../utils/HttpUtils';
+import UseIsMounted from '../../hooks/use-is-mounted';
 
 const UserItem = ({ id, login, email }) => {
-	const ctx = useContext(UsersContext);
+	const userCtx = useContext(UsersContext);
+	const isMounted = UseIsMounted();
+
+	const { sendRequest: deleteRequest } = UseHttp();
+
+	const handleEdit = () => {
+		userCtx.handleSetEditId(id);
+	};
+
+	const deleteUser = () => {
+		if (isMounted) {
+			userCtx.handleDeleteUser(id);
+		}
+	};
+
+	const openCloseModal = (hasError) => {
+		userCtx.handleUpdateModal(hasError);
+	};
+
+	const handleDelete = () => {
+		deleteRequest(
+			{
+				url: `${ENDPOINT}/users/${id}/.json`,
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'applicaiton/json',
+				},
+			},
+			deleteUser,
+			openCloseModal
+		);
+	};
 
 	return (
 		<li className={styles.item}>
@@ -17,7 +51,7 @@ const UserItem = ({ id, login, email }) => {
 			<div className={styles.actions}>
 				<Button
 					isSubmit={false}
-					onClick={() => ctx.handleOperation(id, true)}
+					onClick={handleDelete}
 					cssClass={`${styles.btn} ${styles['delete-btn']}>`}
 				>
 					✖
@@ -25,7 +59,7 @@ const UserItem = ({ id, login, email }) => {
 
 				<Button
 					isSubmit={false}
-					onClick={() => ctx.handleOperation(id, false)}
+					onClick={handleEdit}
 					cssClass={`${styles.btn} ${styles['edit-btn']}>`}
 				>
 					✎
