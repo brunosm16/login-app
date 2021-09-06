@@ -28,7 +28,6 @@ const UseHttp = () => {
 				const data = await response.json();
 				setData(data);
 			} catch (err) {
-				console.log(err.message);
 				setError(true);
 				setRequestError(err.message);
 			}

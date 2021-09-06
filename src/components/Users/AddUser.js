@@ -17,7 +17,7 @@ import {
 	passwordReducer,
 } from '../../context/reducers/Reducers';
 import { findItemById, stateIsNull } from '../../utils/Utils';
-import ENDPOINT from '../../utils/HttpUtils';
+import { ENDPOINT, modalRequestError } from '../../utils/HttpUtils';
 
 const AddUser = () => {
 	const [loginState, dispatchLogin] = useReducer(loginReducer, {
@@ -107,8 +107,8 @@ const AddUser = () => {
 		usersCtx.handleInsertUser(insertedUser);
 	};
 
-	const openCloseModal = (errorObj) => {
-		usersCtx.handleUpdateModal(errorObj);
+	const openCloseModal = () => {
+		usersCtx.handleOpenCloseModal(modalRequestError);
 	};
 
 	const findFocusInput = () => {

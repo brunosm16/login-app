@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import UseHttp from '../hooks/use-http';
-import ENDPOINT from '../utils/HttpUtils';
+import { ENDPOINT } from '../utils/HttpUtils';
 import UsersContext from './users-context';
 
 const UsersContextProvider = ({ children }) => {
@@ -28,7 +28,6 @@ const UsersContextProvider = ({ children }) => {
 		setUsers(fetchedUsers);
 	};
 
-	/* Fetch Users from Server */
 	useEffect(() => {
 		fetchUsers(
 			{

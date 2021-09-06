@@ -4,7 +4,7 @@ import styles from './UserItem.module.css';
 import Button from '../UI/Button/Button';
 import UsersContext from '../../context/users-context';
 import UseHttp from '../../hooks/use-http';
-import ENDPOINT from '../../utils/HttpUtils';
+import { ENDPOINT, modalRequestError } from '../../utils/HttpUtils';
 import UseIsMounted from '../../hooks/use-is-mounted';
 
 const UserItem = ({ id, login, email }) => {
@@ -23,8 +23,8 @@ const UserItem = ({ id, login, email }) => {
 		}
 	};
 
-	const openCloseModal = (hasError) => {
-		userCtx.handleUpdateModal(hasError);
+	const openCloseModal = () => {
+		userCtx.handleOpenCloseModal(modalRequestError);
 	};
 
 	const handleDelete = () => {
@@ -33,7 +33,7 @@ const UserItem = ({ id, login, email }) => {
 				url: `${ENDPOINT}/users/${id}/.json`,
 				method: 'DELETE',
 				headers: {
-					'Content-Type': 'applicaiton/json',
+					'Content-Type': 'application/json',
 				},
 			},
 			deleteUser,
