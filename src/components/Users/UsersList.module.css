@@ -11,10 +11,28 @@
 	max-height: 45rem;
 }
 
+.request-msg-container {
+	width: 100%;
+	color: var(--clr-red);
+	padding: 1rem;
+	width: 620px;
+	margin: 8rem 3rem;
+	text-align: center;
+	background-color: var(--bg-clr-2);
+}
+
+.loading-msg {
+	color: var(--clr-primary-3);
+}
+
 /* Laptop */
 @media screen and (min-width: 1366px) {
 	.list__container {
 		width: 50%;
 		padding-bottom: 1rem;
+	}
+
+	.error-container {
+		width:50%;
 	}
 }

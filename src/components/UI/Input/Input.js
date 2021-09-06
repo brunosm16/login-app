@@ -4,7 +4,7 @@ import styles from './Input.module.css';
 
 const Input = React.forwardRef(
 	(
-		{ label, isValid, id, type, min, max, onChange, onBlur, value, cssClass },
+		{ label, isInvalid, id, type, min, max, onChange, onBlur, value, cssClass },
 		ref
 	) => {
 		const inputRef = useRef();
@@ -20,7 +20,7 @@ const Input = React.forwardRef(
 		return (
 			<div
 				className={`${styles.container} ${
-					!isValid && styles.invalid
+					isInvalid && styles.invalid
 				} ${cssClass}`}
 			>
 				<label htmlFor={id}>{label}</label>
@@ -41,7 +41,7 @@ const Input = React.forwardRef(
 
 Input.defaultProps = {
 	label: '',
-	isValid: true,
+	isInvalid: true,
 	id: '',
 	type: '',
 	min: 6,
@@ -54,7 +54,7 @@ Input.defaultProps = {
 
 Input.propTypes = {
 	label: PropTypes.string,
-	isValid: PropTypes.bool,
+	isInvalid: PropTypes.bool,
 	id: PropTypes.string,
 	type: PropTypes.string,
 	min: PropTypes.number,

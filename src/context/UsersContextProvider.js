@@ -49,7 +49,7 @@ const UsersContextProvider = ({ children }) => {
 			previousData.map((user) => {
 				let currUser = user;
 
-				if (currUser.id === user.id) {
+				if (currUser.id === userUpdated.id) {
 					currUser = userUpdated;
 				}
 

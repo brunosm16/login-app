@@ -1,10 +1,4 @@
-import React, {
-	useState,
-	useEffect,
-	useReducer,
-	useContext,
-	useRef,
-} from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
 import Input from '../UI/Input/Input';
@@ -12,36 +6,51 @@ import styles from './AddUser.module.css';
 import UsersContext from '../../context/users-context';
 import UseHttp from '../../hooks/use-http';
 import {
-	loginReducer,
-	emailReducer,
-	passwordReducer,
-} from '../../context/reducers/Reducers';
-import { findItemById, stateIsNull } from '../../utils/Utils';
+	findItemById,
+	validateEmail,
+	validateLogin,
+	validatePassword,
+} from '../../utils/Utils';
 import { ENDPOINT, modalRequestError } from '../../utils/HttpUtils';
+import UseInput from '../../hooks/use-input';
 
 const AddUser = () => {
-	const [loginState, dispatchLogin] = useReducer(loginReducer, {
-		value: '',
-		isValid: null,
-	});
+	const {
+		value: loginValue,
+		inputHasErrors: loginHasError,
+		inputIsValid: loginIsValid,
+		inputChangeHandler: loginChangeHandler,
+		inputBlurHandler: loginBlurHandler,
+		inputClearHandler: loginClearHandler,
+		setInputValue: setLoginValue,
+	} = UseInput(validateLogin);
 
-	const [emailState, dispatchEmail] = useReducer(emailReducer, {
-		value: '',
-		isValid: null,
-	});
+	const {
+		value: emailValue,
+		inputHasErrors: emailHasError,
+		inputIsValid: emailIsValid,
+		inputChangeHandler: emailChangeHandler,
+		inputBlurHandler: emailBlurHandler,
+		inputClearHandler: emailClearHandler,
+		setInputValue: setEmailValue,
+	} = UseInput(validateEmail);
 
-	const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
-		value: '',
-		isValid: null,
-	});
+	const {
+		value: passwordValue,
+		inputHasErrors: passwordHasError,
+		inputIsValid: passwordIsValid,
+		inputChangeHandler: passwordChangeHandler,
+		inputBlurHandler: passwordBlurHandler,
+		inputClearHandler: passwordClearHandler,
+	} = UseInput(validatePassword);
 
 	const { sendRequest: postRequest } = UseHttp();
 	const { sendRequest: patchRequest } = UseHttp();
 
-	const [formIsValid, setFormIsValid] = useState(true);
+	const formIsValid = loginIsValid && emailIsValid && passwordIsValid;
 
 	const usersCtx = useContext(UsersContext);
-	const [editId, users] = [usersCtx.editId, usersCtx.users];
+	const { editId, users } = usersCtx;
 	const editUser = findItemById(editId, users);
 
 	const loginRef = useRef();
@@ -49,46 +58,12 @@ const AddUser = () => {
 	const passwordRef = useRef();
 
 	/**
-	 * Null is the initial value of name, on first page load,
-	 * input is valid because user didn't enter any input.
-	 */
-	const loginIsNull = stateIsNull(loginState);
-	const emailIsNull = stateIsNull(emailState);
-	const passwordIsNull = stateIsNull(passwordState);
-
-	/**
 	 * On edit operation, a new value for editUser is set,
 	 * and useEffect updates input states with editUser properties.
 	 */
 
-	useEffect(
-		() =>
-			editUser &&
-			dispatchLogin({
-				type: 'INPUT_USER',
-				val: editUser.login,
-			}),
-		[editUser]
-	);
-
-	useEffect(
-		() =>
-			editUser && dispatchEmail({ type: 'INPUT_USER', val: editUser.email }),
-		[editUser]
-	);
-
-	/** Validate form when input changes */
-	useEffect(() => {
-		const debouncerId = setTimeout(() => {
-			setFormIsValid(
-				loginState.isValid && emailState.isValid && passwordState.isValid
-			);
-		}, 500);
-
-		return () => {
-			clearTimeout(debouncerId);
-		};
-	}, [loginState, emailState, passwordState]);
+	useEffect(() => editUser && setLoginValue(editUser.login), [editUser]);
+	useEffect(() => editUser && setEmailValue(editUser.email), [editUser]);
 
 	const updateUser = (user) => {
 		const updatedUser = {
@@ -112,57 +87,33 @@ const AddUser = () => {
 	};
 
 	const findFocusInput = () => {
-		if (!loginState.isValid) {
+		if (!loginIsValid) {
 			loginRef.current.focus();
 			return;
 		}
 
-		if (!emailState.isValid) {
+		if (!emailIsValid) {
 			emailRef.current.focus();
 			return;
 		}
 
-		if (!passwordState.isValid) {
+		if (!passwordIsValid) {
 			passwordRef.current.focus();
 		}
 	};
 
 	/**  Reset states used in Form */
 	const resetForm = () => {
-		dispatchLogin({ type: 'INPUT_CLEAR' });
-		dispatchEmail({ type: 'INPUT_CLEAR' });
-		dispatchPassword({ type: 'INPUT_CLEAR' });
-	};
-
-	const loginHandler = (event) => {
-		dispatchLogin({ type: 'INPUT_USER', val: event.target.value });
-	};
-
-	const loginValidateHandler = () => {
-		dispatchLogin({ type: 'INPUT_BLUR' });
-	};
-
-	const passwordHandler = (event) => {
-		dispatchPassword({ type: 'INPUT_USER', val: event.target.value });
-	};
-
-	const passwordValidateHandler = () => {
-		dispatchPassword({ type: 'INPUT_BLUR' });
-	};
-
-	const emailHandler = (event) => {
-		dispatchEmail({ type: 'INPUT_USER', val: event.target.value });
-	};
-
-	const emailValidateHandler = () => {
-		dispatchEmail({ type: 'INPUT_BLUR' });
+		loginClearHandler();
+		emailClearHandler();
+		passwordClearHandler();
 	};
 
 	const saveInput = () => {
 		const inputObj = {
-			login: loginState.value,
-			password: passwordState.value,
-			email: emailState.value,
+			login: loginValue,
+			password: passwordValue,
+			email: emailValue,
 		};
 
 		const reqObj = {
@@ -192,15 +143,19 @@ const AddUser = () => {
 		resetForm();
 	};
 
+	/** On first page load set isValid to false,
+	 * if user tries to input a empty value
+	 */
+	const blurInputs = () => {
+		loginBlurHandler();
+		passwordBlurHandler();
+		emailBlurHandler();
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		/** On first page load set isValid to false,
-		 * if user tries to input a empty value
-		 */
-		dispatchLogin({ type: 'INPUT_BLUR' });
-		dispatchPassword({ type: 'INPUT_BLUR' });
-		dispatchEmail({ type: 'INPUT_BLUR' });
+		blurInputs();
 
 		return formIsValid ? saveInput() : findFocusInput();
 	};
@@ -213,43 +168,58 @@ const AddUser = () => {
 						<div className={styles.control}>
 							<Input
 								label="login"
-								isValid={loginIsNull}
+								isInvalid={loginHasError}
 								id="login"
 								type="text"
-								onChange={loginHandler}
-								onBlur={loginValidateHandler}
-								value={loginState.value}
+								onChange={loginChangeHandler}
+								onBlur={loginBlurHandler}
+								value={loginValue}
 								ref={loginRef}
 								cssClass={styles['control-input']}
 							/>
+							{loginHasError && (
+								<p className={styles['error-msg']}>
+									Login must have at least 3 characters
+								</p>
+							)}
 						</div>
 
 						<div className={styles.control}>
 							<Input
 								label="email"
-								isValid={emailIsNull}
+								isInvalid={emailHasError}
 								id="email"
 								type="email"
-								onChange={emailHandler}
-								onBlur={emailValidateHandler}
-								value={emailState.value}
+								onChange={emailChangeHandler}
+								onBlur={emailBlurHandler}
+								value={emailValue}
 								ref={emailRef}
 								cssClass={styles['control-input']}
 							/>
+							{emailHasError && (
+								<p className={styles['error-msg']}>
+									Email must have at least 6 characters and include @.
+								</p>
+							)}
 						</div>
 
 						<div className={styles.control}>
 							<Input
 								label="password"
-								isValid={passwordIsNull}
+								isInvalid={passwordHasError}
 								id="password"
 								type="password"
-								onChange={passwordHandler}
-								onBlur={passwordValidateHandler}
-								value={passwordState.value}
+								onChange={passwordChangeHandler}
+								onBlur={passwordBlurHandler}
+								value={passwordValue}
 								ref={passwordRef}
 								cssClass={styles['control-input']}
 							/>
+							{passwordHasError && (
+								<p className={styles['error-msg']}>
+									Password must have at least 6 characters
+								</p>
+							)}
 						</div>
 					</div>
 

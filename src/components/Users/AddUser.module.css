@@ -47,6 +47,12 @@
 	color: var(--clr-black);
 }
 
+.error-msg {
+	font-size: 1rem;
+	color:var(--clr-red);
+	margin: 0.25rem 0;
+}
+
 /* Pixel 2 */
 @media screen and (min-width: 411px) {
 	.form-container,

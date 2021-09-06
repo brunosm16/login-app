@@ -10,6 +10,7 @@
 	--clr-primary-3: #f6aa1c;
 	--clr-white: #fff;
 	--clr-black: #000;
+	--clr-red: #df0d30;
 }
 
 * {
@@ -18,7 +19,7 @@
 
 body {
 	margin: 0;
-	background:var(--bg-clr-1);
+	background: var(--bg-clr-1);
 }
 
 html {
