@@ -1,4 +1,4 @@
-# 🔒 Register App
+# 📝 Register App
 
 Recebe os dados de um usuário para realizar um cadastro.
 
