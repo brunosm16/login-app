@@ -143,9 +143,7 @@ const AddUser = () => {
 		resetForm();
 	};
 
-	/** On first page load set isValid to false,
-	 * if user tries to input a empty value
-	 */
+	/** Avoid empty values on first page load */
 	const blurInputs = () => {
 		loginBlurHandler();
 		passwordBlurHandler();
