@@ -142,8 +142,7 @@ const AddUser = () => {
 		/** Reset form */
 		resetForm();
 	};
-
-	/** Avoid empty values on first page load */
+	
 	const blurInputs = () => {
 		loginBlurHandler();
 		passwordBlurHandler();
@@ -152,7 +151,8 @@ const AddUser = () => {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-
+		
+		/** Avoid empty values on first page load */
 		blurInputs();
 
 		return formIsValid ? saveInput() : findFocusInput();
